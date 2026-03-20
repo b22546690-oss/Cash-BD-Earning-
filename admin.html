@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --sidebar-bg: #1e293b;
+            --main-bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --primary-color: #6366f1;
+            --text-dark: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--main-bg);
+            color: var(--text-dark);
+        }
+        .sidebar { 
+            background-color: var(--sidebar-bg);
+            transition: transform 0.3s ease-in-out;
+            z-index: 40;
+        }
+        .sidebar-overlay {
+            background-color: rgba(0,0,0,0.5);
+            z-index: 39;
+        }
+        .sidebar a {
+            transition: all 0.2s ease-in-out;
+            color: #cbd5e1;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            transform: translateX(4px);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #818cf8 100%);
+            color: var(--text-light);
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .data-table thead { background-color: #e2e8f0; }
+        .data-table th, .data-table td { padding: 0.75rem 1rem; text-align: left; white-space: nowrap; }
+        .data-table tbody tr:nth-child(even) { background-color: #f8fafc; }
+        .data-table tbody tr.user-row { cursor: pointer; transition: background-color 0.2s; }
+        .data-table tbody tr.user-row:hover { background-color: #eef2ff; }
+        .btn-approve { background-color: #22c55e; color: white; }
+        .btn-reject { background-color: #ef4444; color: white; }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-warning { background-color: #f59e0b; color: white; }
+        .modal-backdrop {
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+        }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Loader */
+        .loader-container {
+            background-color: rgba(255,255,255,0.8);
+            z-index: 9999;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Tabs */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 1rem;
+        }
+        .tab-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+        .tab-button.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* Status Badges */
+        .status-pending { background-color: #fef3c7; color: #92400e; }
+        .status-approved { background-color: #d1fae5; color: #065f46; }
+        .status-rejected { background-color: #fee2e2; color: #991b1b; }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 flex items-center justify-center loader-container hidden z-50">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="flex items-center justify-center min-h-screen bg-slate-900">
+        <div class="w-full max-w-sm m-4 p-8 space-y-6 bg-white rounded-lg shadow-lg">
+            <div class="text-center">
+                <i class="fas fa-shield-halved text-5xl text-indigo-600"></i>
+                <h1 class="mt-4 text-3xl font-bold text-gray-800">অ্যাডমিন প্যানেল</h1>
+                <p class="text-gray-500">অনুগ্রহ করে পাসওয়ার্ড দিন</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <input type="password" id="admin-password" placeholder="পাসওয়ার্ড" required class="w-full px-4 py-2 text-center border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full py-2 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition">প্রবেশ করুন</button>
+                <p id="login-error" class="text-center text-red-500 text-sm hidden">ভুল পাসওয়ার্ড!</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel Container -->
+    <div id="admin-panel" class="hidden">
+        <!-- Sidebar Overlay for Mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 fixed inset-y-0 left-0 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+             <div class="p-6 text-center border-b border-slate-700">
+                <h2 id="sidebar-site-name" class="text-2xl font-bold text-white">Admin Panel</h2>
+                <p class="text-sm text-slate-400">অ্যাডমিন</p>
+            </div>
+            <nav id="admin-nav" class="flex-grow p-4 space-y-2">
+                <a href="#dashboard" class="nav-link active flex items-center p-3 rounded-md space-x-3"><i class="fas fa-tachometer-alt w-5"></i><span>ড্যাশবোর্ড</span></a>
+                <a href="#users" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-users w-5"></i><span>ব্যবহারকারী</span></a>
+                <a href="#transactions" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-exchange-alt w-5"></i><span>লেনদেন</span></a>
+                <a href="#gmail-management" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-envelope w-5"></i><span>Gmail ম্যানেজ</span></a>
+                <a href="#requests" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-inbox w-5"></i><span>অনুরোধসমূহ</span></a>
+                <a href="#tasks" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-tasks w-5"></i><span>টাস্ক ম্যানেজ</span></a>
+                <a href="#plans" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-star w-5"></i><span>প্ল্যান ম্যানেজ</span></a>
+                <a href="#referrals" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-user-friends w-5"></i><span>রেফারেল</span></a>
+                <a href="#settings" class="nav-link flex items-center p-3 rounded-md space-x-3"><i class="fas fa-cog w-5"></i><span>সেটিংস</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col md:ml-64">
+            <!-- Mobile Header -->
+            <header class="bg-white shadow-md p-4 flex justify-between items-center md:hidden sticky top-0 z-30">
+                <h1 id="page-title" class="text-lg font-bold">ড্যাশবোর্ড</h1>
+                <button id="menu-button" class="text-gray-700" aria-label="Toggle Menu"><i class="fas fa-bars text-xl"></i></button>
+            </header>
+            
+            <main class="p-4 md:p-8 flex-grow">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="page active">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">ড্যাশবোর্ড</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>মোট ব্যবহারকারী</p>
+                                <h3 id="total-users" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-users text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>মোট অ্যাক্টিভ ব্যবহারকারী</p>
+                                <h3 id="active-users" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-user-check text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>আজকের Gmail সাবমিশন</p>
+                                <h3 id="today-gmail-submissions" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-envelope text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>পেন্ডিং Gmail</p>
+                                <h3 id="pending-gmail" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-hourglass-half text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>পেন্ডিং উত্তোলন</p>
+                                <h3 id="pending-withdrawals" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-money-bill-wave text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>আজকের উত্তোলন</p>
+                                <h3 id="today-withdrawals" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-wallet text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>মোট রেফারেল</p>
+                                <h3 id="total-referrals" class="text-4xl font-bold">0</h3>
+                            </div>
+                            <i class="fas fa-user-plus text-4xl opacity-30"></i>
+                        </div>
+                        <div class="stat-card p-6 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <p>আজকের আয়</p>
+                                <h3 id="today-income" class="text-4xl font-bold">0</h3>
+                                <small>৳</small>
+                            </div>
+                            <i class="fas fa-chart-line text-4xl opacity-30"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity Section -->
+                    <div class="mt-8">
+                        <h2 class="text-2xl font-bold mb-4">সাম্প্রতিক কার্যকলাপ</h2>
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <div id="recent-activity" class="space-y-2">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Page -->
+                <div id="users" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">ব্যবহারকারী ম্যানেজমেন্ট</h1>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-4">
+                            <input type="text" id="user-search" placeholder="ব্যবহারকারী খুঁজুন (নাম, ইমেইল, রেফারেল আইডি)" class="w-full border p-2 rounded-md">
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="data-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>নাম</th>
+                                        <th>ইমেইল</th>
+                                        <th>ব্যালেন্স</th>
+                                        <th>প্ল্যান</th>
+                                        <th>রেফারেল আইডি</th>
+                                        <th>সক্রিয় রেফারেল</th>
+                                        <th>স্ট্যাটাস</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="user-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Page -->
+                <div id="transactions" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">লেনদেন ইতিহাস</h1>
+                    <div class="tab-buttons mb-4">
+                        <button class="tab-button active" data-type="all">সকল লেনদেন</button>
+                        <button class="tab-button" data-type="activation">অ্যাক্টিভেশন</button>
+                        <button class="tab-button" data-type="withdrawal">উত্তোলন</button>
+                        <button class="tab-button" data-type="plan">প্ল্যান কেনা</button>
+                        <button class="tab-button" data-type="gmail">Gmail</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-4 flex gap-2">
+                            <input type="date" id="transaction-date-from" class="border p-2 rounded-md">
+                            <input type="date" id="transaction-date-to" class="border p-2 rounded-md">
+                            <input type="text" id="transaction-search" placeholder="ব্যবহারকারী বা TrxID সার্চ" class="flex-1 border p-2 rounded-md">
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="data-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>তারিখ</th>
+                                        <th>ধরণ</th>
+                                        <th>ব্যবহারকারী</th>
+                                        <th>পরিমাণ</th>
+                                        <th>TrxID</th>
+                                        <th>মেথড</th>
+                                        <th>স্ট্যাটাস</th>
+                                        <th>বিবরণ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transaction-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gmail Management Page -->
+                <div id="gmail-management" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">Gmail সাবমিশন ম্যানেজমেন্ট</h1>
+                    
+                    <!-- Gmail Settings Section -->
+                    <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-bold mb-4 border-b pb-2">Gmail সেটিংস</h2>
+                        <form id="gmail-settings-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="gmail-password" class="block text-sm font-medium text-gray-700">ডিফল্ট Gmail পাসওয়ার্ড</label>
+                                <input type="text" id="gmail-password" class="mt-1 w-full border p-2 rounded-md">
+                            </div>
+                            <div>
+                                <label for="gmail-price" class="block text-sm font-medium text-gray-700">প্রতি Gmail মূল্য (৳)</label>
+                                <input type="number" id="gmail-price" step="0.01" class="mt-1 w-full border p-2 rounded-md">
+                            </div>
+                            <div>
+                                <label for="gmail-global-limit" class="block text-sm font-medium text-gray-700">প্রতিদিনের সর্বোচ্চ সাবমিশন</label>
+                                <input type="number" id="gmail-global-limit" class="mt-1 w-full border p-2 rounded-md">
+                            </div>
+                            <div class="flex items-end">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">আজকের সাবমিশন: <span id="today-count-display">0</span></p>
+                                    <button type="button" id="reset-today-count" class="mt-2 px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
+                                        আজকের গণনা রিসেট করুন
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
+                                    Gmail সেটিংস সেভ করুন
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Gmail Submissions Table -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold mb-2">সকল Gmail সাবমিশন</h3>
+                            <div class="flex gap-2 mb-4">
+                                <select id="gmail-status-filter" class="border p-2 rounded-md">
+                                    <option value="all">সকল স্ট্যাটাস</option>
+                                    <option value="pending">পেন্ডিং</option>
+                                    <option value="approved">অনুমোদিত</option>
+                                    <option value="rejected">বাতিল</option>
+                                </select>
+                                <input type="date" id="gmail-date-filter" class="border p-2 rounded-md">
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="data-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>তারিখ</th>
+                                        <th>ব্যবহারকারী</th>
+                                        <th>Gmail ঠিকানা</th>
+                                        <th>ব্যবহৃত পাসওয়ার্ড</th>
+                                        <th>মূল্য</th>
+                                        <th>স্ট্যাটাস</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gmail-submission-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Requests Page -->
+                <div id="requests" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">অনুরোধসমূহ</h1>
+                    <div class="tab-buttons mb-4">
+                        <button class="tab-button active" data-tab="withdrawal">উত্তোলন অনুরোধ</button>
+                        <button class="tab-button" data-tab="activation">অ্যাক্টিভেশন অনুরোধ</button>
+                        <button class="tab-button" data-tab="plan">প্ল্যান কেনার অনুরোধ</button>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <!-- Withdrawal Requests -->
+                        <div id="withdrawal-tab" class="tab-content">
+                            <h2 class="text-2xl font-semibold mb-4">উত্তোলন অনুরোধ</h2>
+                            <div class="bg-white rounded-lg shadow-md overflow-x-auto">
+                                <table class="data-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>তারিখ</th>
+                                            <th>ব্যবহারকারীর নাম</th>
+                                            <th>পরিমাণ</th>
+                                            <th>নম্বর</th>
+                                            <th>মেথড</th>
+                                            <th>অ্যাকশন</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="withdrawal-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Activation Requests -->
+                        <div id="activation-tab" class="tab-content hidden">
+                            <h2 class="text-2xl font-semibold mb-4">অ্যাকাউন্ট অ্যাক্টিভেশন অনুরোধ</h2>
+                            <div class="bg-white rounded-lg shadow-md overflow-x-auto">
+                                <table class="data-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>তারিখ</th>
+                                            <th>ব্যবহারকারীর নাম</th>
+                                            <th>TrxID</th>
+                                            <th>মেথড</th>
+                                            <th>রেফারেল তথ্য</th>
+                                            <th>অ্যাকশন</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="activation-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Plan Purchase Requests -->
+                        <div id="plan-tab" class="tab-content hidden">
+                            <h2 class="text-2xl font-semibold mb-4">প্ল্যান কেনার অনুরোধ</h2>
+                            <div class="bg-white rounded-lg shadow-md overflow-x-auto">
+                                <table class="data-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>তারিখ</th>
+                                            <th>ব্যবহারকারীর নাম</th>
+                                            <th>প্ল্যানের নাম</th>
+                                            <th>TrxID</th>
+                                            <th>মেথড</th>
+                                            <th>অ্যাকশন</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="plan-request-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks Page -->
+                <div id="tasks" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">টাস্ক ম্যানেজমেন্ট</h1>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4">নতুন টাস্ক যোগ করুন</h2>
+                            <form id="add-task-form" class="space-y-4">
+                                <input type="text" id="task-name" placeholder="টাস্কের নাম" required class="w-full border p-2 rounded-md">
+                                <input type="number" step="0.01" id="task-reward" placeholder="রিওয়ার্ড (টাকা)" required class="w-full border p-2 rounded-md">
+                                <input type="url" id="task-link" placeholder="টাস্কের লিঙ্ক (https://...)" required class="w-full border p-2 rounded-md">
+                                <select id="task-plan" class="w-full border p-2 rounded-md">
+                                    <option value="basic">সাধারণ টাস্ক (Normal)</option>
+                                </select>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" id="task-daily-limit" placeholder="দৈনিক লিমিট" class="w-full border p-2 rounded-md">
+                                    <input type="number" id="task-cooldown" placeholder="কুলডাউন (মিনিট)" class="w-full border p-2 rounded-md">
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="task-active" class="mr-2" checked>
+                                    <label for="task-active">টাস্ক সক্রিয়</label>
+                                </div>
+                                <button type="submit" class="btn-primary w-full p-2 rounded-md font-semibold">টাস্ক যোগ করুন</button>
+                            </form>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4">বর্তমান টাস্কসমূহ</h2>
+                            <div class="space-y-4">
+                                <div id="task-list" class="max-h-[400px] overflow-y-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Plans Page -->
+                <div id="plans" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">প্ল্যান ম্যানেজমেন্ট</h1>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4">নতুন প্ল্যান যোগ করুন</h2>
+                            <form id="add-plan-form" class="space-y-4">
+                                <input type="text" id="plan-name" placeholder="প্ল্যানের নাম (e.g., VIP-1)" required class="w-full border p-2 rounded-md">
+                                <input type="number" id="plan-price" placeholder="মূল্য (টাকা)" required class="w-full border p-2 rounded-md">
+                                <input type="number" id="plan-duration" placeholder="প্ল্যানের মেয়াদ (দিন)" required class="w-full border p-2 rounded-md">
+                                <textarea id="plan-description" placeholder="প্ল্যানের সংক্ষিপ্ত বিবরণ" class="w-full border p-2 rounded-md"></textarea>
+                                <button type="submit" class="btn-primary w-full p-2 rounded-md font-semibold">প্ল্যান যোগ করুন</button>
+                            </form>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4">বর্তমান প্ল্যানসমূহ</h2>
+                            <div id="plan-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referrals Page -->
+                <div id="referrals" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">রেফারেল ম্যানেজমেন্ট</h1>
+                    
+                    <!-- Referral Settings -->
+                    <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-bold mb-4 border-b pb-2">রেফারেল সেটিংস</h2>
+                        <form id="referral-settings-form" class="space-y-4">
+                            <div>
+                                <label for="referral-bonus" class="block text-sm font-medium text-gray-700">সক্রিয় রেফারেল বোনাস (৳)</label>
+                                <input type="number" id="referral-bonus" step="1" class="mt-1 w-full border p-2 rounded-md">
+                            </div>
+                            
+                            <!-- Referral Challenges -->
+                            <div id="referral-challenges-container">
+                                <h3 class="text-lg font-semibold mb-2">রেফারেল চ্যালেঞ্জসমূহ</h3>
+                                <div id="challenges-list" class="space-y-2 mb-4">
+                                    <!-- Will be populated dynamically -->
+                                </div>
+                                <button type="button" id="add-challenge-btn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                                    নতুন চ্যালেঞ্জ যোগ করুন
+                                </button>
+                            </div>
+                            
+                            <button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
+                                রেফারেল সেটিংস সেভ করুন
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Referral Analytics -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                            <h3 class="text-lg font-semibold mb-2">মোট রেফারেল</h3>
+                            <p id="total-ref-count" class="text-3xl font-bold text-indigo-600">0</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                            <h3 class="text-lg font-semibold mb-2">সক্রিয় রেফারেল</h3>
+                            <p id="active-ref-count" class="text-3xl font-bold text-green-600">0</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                            <h3 class="text-lg font-semibold mb-2">রেফারেল ইনকাম</h3>
+                            <p id="referral-income" class="text-3xl font-bold text-yellow-600">0 ৳</p>
+                        </div>
+                    </div>
+
+                    <!-- Referral List -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <h3 class="text-xl font-semibold p-4 border-b">রেফারেল লিস্ট</h3>
+                        <div class="overflow-x-auto">
+                            <table class="data-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>রেফারেল আইডি</th>
+                                        <th>মালিক</th>
+                                        <th>রেফারেল সংখ্যা</th>
+                                        <th>সক্রিয় রেফারেল</th>
+                                        <th>আয়</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="referral-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settings" class="page">
+                    <h1 class="text-3xl font-bold mb-6 hidden md:block">সাইট সেটিংস</h1>
+                    <form id="settings-form" class="space-y-8">
+                        <!-- General Settings -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4 border-b pb-2">সাধারণ সেটিংস</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="site-name" class="block text-sm font-medium text-gray-700">ওয়েবসাইটের নাম</label>
+                                    <input type="text" id="site-name" class="mt-1 w-full border p-2 rounded-md">
+                                </div>
+                                <div>
+                                    <label for="activation-fee" class="block text-sm font-medium text-gray-700">অ্যাকাউন্ট অ্যাক্টিভেশন ফি (৳)</label>
+                                    <input type="number" step="1" id="activation-fee" class="mt-1 w-full border p-2 rounded-md">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Withdrawal Settings -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4 border-b pb-2">উত্তোলন সেটিংস</h2>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <h3 class="font-semibold mb-2">সাধারণ উত্তোলন</h3>
+                                        <input type="number" id="normal-min-amount" placeholder="সর্বনিম্ন পরিমাণ" class="w-full border p-2 rounded-md mb-2">
+                                        <input type="number" id="normal-min-refs" placeholder="সর্বনিম্ন রেফারেল" class="w-full border p-2 rounded-md">
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold mb-2">VIP উত্তোলন</h3>
+                                        <input type="number" id="vip-min-amount" placeholder="সর্বনিম্ন পরিমাণ" class="w-full border p-2 rounded-md mb-2">
+                                        <input type="number" id="vip-min-refs" placeholder="সর্বনিম্ন রেফারেল" class="w-full border p-2 rounded-md">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Settings -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4 border-b pb-2">পেমেন্ট নম্বর সেটিংস</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="bkash-number" class="block text-sm font-medium text-gray-700">বিকাশ নম্বর</label>
+                                    <input type="text" id="bkash-number" class="mt-1 w-full border p-2 rounded-md">
+                                </div>
+                                <div>
+                                    <label for="nagad-number" class="block text-sm font-medium text-gray-700">নগদ নম্বর</label>
+                                    <input type="text" id="nagad-number" class="mt-1 w-full border p-2 rounded-md">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Welcome Message Settings -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4 border-b pb-2">ওয়েলকাম মেসেজ সেটিংস</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="welcome-inactive" class="block text-sm font-medium text-gray-700">ইনঅ্যাক্টিভ ব্যবহারকারীর জন্য মেসেজ</label>
+                                    <textarea id="welcome-inactive" rows="3" class="mt-1 w-full border p-2 rounded-md"></textarea>
+                                </div>
+                                <div>
+                                    <label for="welcome-active" class="block text-sm font-medium text-gray-700">অ্যাক্টিভ ব্যবহারকারীর জন্য মেসেজ</label>
+                                    <textarea id="welcome-active" rows="3" class="mt-1 w-full border p-2 rounded-md"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pop-up Settings -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4 border-b pb-2">Pop-up মেসেজ সেটিংস</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="popup-link" class="block text-sm font-medium text-gray-700">Pop-up মেসেজ লিংক</label>
+                                    <input type="url" id="popup-link" placeholder="https://t.me/yourchannel" class="mt-1 w-full border p-2 rounded-md">
+                                    <p class="text-xs text-gray-500 mt-1">এই লিংকে ব্যবহারকারীদের পপ-আপ মেসেজের মাধ্যমে পাঠানো হবে। (যেমন: টেলিগ্রাম চ্যানেল)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Admin Password -->
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold mb-4 border-b pb-2">অ্যাডমিন সিকিউরিটি</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="admin-password-change" class="block text-sm font-medium text-gray-700">নতুন অ্যাডমিন পাসওয়ার্ড</label>
+                                    <input type="password" id="admin-password-change" class="mt-1 w-full border p-2 rounded-md">
+                                    <p class="text-xs text-gray-500 mt-1">পাসওয়ার্ড পরিবর্তন করলে নতুন পাসওয়ার্ডটি ডাটাবেজে সেভ হবে</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full text-lg py-3 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition">
+                            <i class="fas fa-save mr-2"></i> সকল সেটিংস সেভ করুন
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- User Management Modal -->
+    <div id="user-management-modal" class="fixed inset-0 flex items-center justify-center modal-backdrop hidden z-50 p-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-4xl m-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h2 id="user-modal-title" class="text-xl font-bold">ব্যবহারকারী ম্যানেজমেন্ট</h2>
+                <button class="close-modal-btn text-2xl text-gray-500">&times;</button>
+            </div>
+            <div class="tab-buttons mb-4">
+                <button class="tab-button active" data-tab="overview">ওভারভিউ</button>
+                <button class="tab-button" data-tab="transactions">লেনদেন</button>
+                <button class="tab-button" data-tab="gmail">Gmail সাবমিশন</button>
+                <button class="tab-button" data-tab="referrals">রেফারেল</button>
+                <button class="tab-button" data-tab="tasks">টাস্ক</button>
+            </div>
+            <div id="user-modal-content">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Gmail Submission Modal -->
+    <div id="gmail-detail-modal" class="fixed inset-0 flex items-center justify-center modal-backdrop hidden z-50 p-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg m-4">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h2 class="text-xl font-bold">Gmail সাবমিশন বিস্তারিত</h2>
+                <button class="close-gmail-modal-btn text-2xl text-gray-500">&times;</button>
+            </div>
+            <div id="gmail-modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_ZAFoMmuLfSGKIS2sYxg8Ax29tN2BUFI",
+            authDomain: "earn-hpv2.firebaseapp.com",
+            databaseURL: "https://earn-hpv2-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "earn-hpv2",
+            storageBucket: "earn-hpv2.firebasestorage.app",
+            messagingSenderId: "850861756626",
+            appId: "1:850861756626:web:7b267b7a75f60f4a861d0b",
+            measurementId: "G-2WKHTT86RT"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        // --- Global State ---
+        let allUsers = {};
+        let allPlans = {};
+        let allTransactions = {};
+        let allGmailSubmissions = {};
+        let adminSettings = {};
+        
+        // --- DOM Elements ---
+        const loginScreen = document.getElementById('login-screen');
+        const adminPanel = document.getElementById('admin-panel');
+        const loader = document.getElementById('loader');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const menuButton = document.getElementById('menu-button');
+        const pageTitle = document.getElementById('page-title');
+        const userManagementModal = document.getElementById('user-management-modal');
+        const gmailDetailModal = document.getElementById('gmail-detail-modal');
+
+        // --- Helper Functions ---
+        const showLoader = () => loader.style.display = 'flex';
+        const hideLoader = () => loader.style.display = 'none';
+        
+        const alertUser = (message, isError = false) => {
+            const color = isError ? 'bg-red-500' : 'bg-green-500';
+            const alertBox = document.createElement('div');
+            alertBox.className = `fixed top-5 right-5 ${color} text-white p-3 rounded-lg shadow-xl z-[9999] transition-opacity duration-300`;
+            alertBox.textContent = message;
+            document.body.appendChild(alertBox);
+            setTimeout(() => {
+                alertBox.style.opacity = '0';
+                setTimeout(() => alertBox.remove(), 300);
+            }, 3000);
+        };
+        
+        const formatDate = (dateString) => {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('bn-BD') + ' ' + date.toLocaleTimeString('bn-BD');
+        };
+        
+        const getStatusBadge = (status) => {
+            const statusMap = {
+                pending: { text: 'পেন্ডিং', class: 'status-pending' },
+                approved: { text: 'অনুমোদিত', class: 'status-approved' },
+                rejected: { text: 'বাতিল', class: 'status-rejected' }
+            };
+            const statusInfo = statusMap[status] || { text: status, class: 'bg-gray-100 text-gray-800' };
+            return `<span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>`;
+        };
+        
+        // --- Login ---
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('admin-password').value;
+            
+            showLoader();
+            try {
+                // Check admin password from database
+                const adminSnapshot = await db.ref('admin/password').once('value');
+                const storedPassword = adminSnapshot.val();
+                
+                if (storedPassword === password || password === '50') { // Fallback for initial setup
+                    loginScreen.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                    initializeApp();
+                } else {
+                    const loginError = document.getElementById('login-error');
+                    loginError.style.display = 'block';
+                    setTimeout(() => loginError.style.display = 'none', 2000);
+                }
+            } catch (error) {
+                // If no password in DB, use default
+                if (password === '50') {
+                    loginScreen.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                    initializeApp();
+                } else {
+                    const loginError = document.getElementById('login-error');
+                    loginError.style.display = 'block';
+                    setTimeout(() => loginError.style.display = 'none', 2000);
+                }
+            } finally {
+                hideLoader();
+            }
+        });
+        
+        // --- App Initialization ---
+        function initializeApp() {
+            setupNavigationAndMobile();
+            loadAllData();
+            setupEventListeners();
+        }
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        function setupNavigationAndMobile() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    pages.forEach(p => p.classList.remove('active'));
+                    document.getElementById(targetId).classList.add('active');
+                    pageTitle.textContent = link.querySelector('span').textContent;
+                    if (window.innerWidth < 768) {
+                        toggleSidebar();
+                    }
+                    
+                    // Load specific data when switching pages
+                    if (targetId === 'gmail-management') {
+                        loadGmailSubmissions();
+                    } else if (targetId === 'transactions') {
+                        loadAllTransactions();
+                    } else if (targetId === 'referrals') {
+                        loadReferralData();
+                    }
+                });
+            });
+            menuButton.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', toggleSidebar);
+        }
+        
+        // --- Data Loading & Rendering ---
+        async function loadAllData() {
+            showLoader();
+            try {
+                const [
+                    usersSnapshot, 
+                    transactionsSnapshot, 
+                    tasksSnapshot, 
+                    plansSnapshot, 
+                    adminSnapshot,
+                    referralCodesSnapshot
+                ] = await Promise.all([
+                    db.ref('users').once('value'),
+                    db.ref('transactions').once('value'),
+                    db.ref('tasks').once('value'),
+                    db.ref('plans').once('value'),
+                    db.ref('admin').once('value'),
+                    db.ref('referralCodes').once('value')
+                ]);
+
+                allUsers = usersSnapshot.val() || {};
+                allPlans = plansSnapshot.val() || {};
+                allTransactions = transactionsSnapshot.val() || {};
+                adminSettings = adminSnapshot.val() || {};
+                
+                // Collect all Gmail submissions
+                allGmailSubmissions = {};
+                Object.entries(allUsers).forEach(([uid, user]) => {
+                    if (user.gmailSubmissions) {
+                        Object.entries(user.gmailSubmissions).forEach(([subId, submission]) => {
+                            allGmailSubmissions[subId] = {
+                                ...submission,
+                                userId: uid,
+                                username: user.username,
+                                submissionId: subId
+                            };
+                        });
+                    }
+                });
+
+                renderDashboardData();
+                renderUsers();
+                loadAllTransactions();
+                renderRequests();
+                renderTasks(tasksSnapshot.val() || {});
+                renderPlans(allPlans);
+                renderSettings(adminSettings);
+                renderGmailSettings(adminSettings);
+                loadReferralData();
+
+            } catch (error) {
+                console.error("Error loading data:", error);
+                alertUser("ডাটা লোড করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function renderDashboardData() {
+            const totalUsers = Object.keys(allUsers).length;
+            const activeUsers = Object.values(allUsers).filter(user => user.isAccountActive).length;
+            
+            // Calculate Gmail stats
+            const today = new Date().toDateString();
+            let todayGmailCount = 0;
+            let pendingGmailCount = 0;
+            
+            Object.values(allGmailSubmissions).forEach(sub => {
+                const subDate = new Date(sub.date).toDateString();
+                if (subDate === today) {
+                    todayGmailCount++;
+                }
+                if (sub.status === 'pending') {
+                    pendingGmailCount++;
+                }
+            });
+            
+            // Calculate withdrawal stats
+            const todayWithdrawals = Object.values(allTransactions).filter(tx => 
+                tx.type === 'Withdrawal' && 
+                tx.status === 'approved' &&
+                new Date(tx.date).toDateString() === today
+            ).length;
+            
+            const pendingWithdrawals = Object.values(allTransactions).filter(tx => 
+                tx.type === 'Withdrawal' && 
+                tx.status === 'pending'
+            ).length;
+            
+            // Calculate referral stats
+            let totalReferrals = 0;
+            Object.values(allUsers).forEach(user => {
+                if (user.referrals) {
+                    totalReferrals += Object.keys(user.referrals).length;
+                }
+            });
+            
+            // Calculate today's income
+            let todayIncome = 0;
+            const todayTransactions = Object.values(allTransactions).filter(tx => 
+                new Date(tx.date).toDateString() === today
+            );
+            
+            todayTransactions.forEach(tx => {
+                if (tx.type === 'Activation' || tx.type === 'Plan Purchase') {
+                    todayIncome += Math.abs(tx.amount) || 0;
+                }
+            });
+            
+            // Update dashboard cards
+            document.getElementById('total-users').textContent = totalUsers;
+            document.getElementById('active-users').textContent = activeUsers;
+            document.getElementById('today-gmail-submissions').textContent = todayGmailCount;
+            document.getElementById('pending-gmail').textContent = pendingGmailCount;
+            document.getElementById('today-withdrawals').textContent = todayWithdrawals;
+            document.getElementById('pending-withdrawals').textContent = pendingWithdrawals;
+            document.getElementById('total-referrals').textContent = totalReferrals;
+            document.getElementById('today-income').textContent = todayIncome.toFixed(2);
+            
+            // Render recent activity
+            renderRecentActivity();
+        }
+        
+        function renderRecentActivity() {
+            const activityContainer = document.getElementById('recent-activity');
+            activityContainer.innerHTML = '';
+            
+            // Get last 10 transactions sorted by date
+            const recentTransactions = Object.entries(allTransactions)
+                .sort((a, b) => new Date(b[1].date) - new Date(a[1].date))
+                .slice(0, 10);
+            
+            if (recentTransactions.length === 0) {
+                activityContainer.innerHTML = '<p class="text-center text-gray-500">কোনো সাম্প্রতিক কার্যকলাপ নেই।</p>';
+                return;
+            }
+            
+            recentTransactions.forEach(([id, tx]) => {
+                const user = allUsers[tx.userId];
+                const username = user ? user.username : 'Unknown';
+                const date = formatDate(tx.date);
+                const amount = Math.abs(tx.amount).toFixed(2);
+                
+                let icon = 'fas fa-exchange-alt';
+                let color = 'text-blue-500';
+                
+                switch(tx.type) {
+                    case 'Activation':
+                        icon = 'fas fa-user-check';
+                        color = 'text-green-500';
+                        break;
+                    case 'Withdrawal':
+                        icon = 'fas fa-money-bill-wave';
+                        color = 'text-red-500';
+                        break;
+                    case 'Plan Purchase':
+                        icon = 'fas fa-star';
+                        color = 'text-yellow-500';
+                        break;
+                    case 'Gmail':
+                        icon = 'fas fa-envelope';
+                        color = 'text-purple-500';
+                        break;
+                    case 'Referral Reward':
+                        icon = 'fas fa-user-friends';
+                        color = 'text-indigo-500';
+                        break;
+                }
+                
+                const activityItem = `
+                    <div class="flex items-center justify-between p-2 border-b last:border-b-0">
+                        <div class="flex items-center space-x-3">
+                            <i class="${icon} ${color}"></i>
+                            <div>
+                                <p class="font-medium">${username}</p>
+                                <p class="text-sm text-gray-500">${tx.type} - ${amount}৳</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-500">${date}</p>
+                            ${getStatusBadge(tx.status || 'pending')}
+                        </div>
+                    </div>
+                `;
+                
+                activityContainer.innerHTML += activityItem;
+            });
+        }
+
+        function renderUsers(searchTerm = '') {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            const lowerCaseSearchTerm = searchTerm.toLowerCase();
+            
+            const filteredUsers = Object.entries(allUsers).filter(([uid, user]) => {
+                if (!searchTerm) return true;
+                return (
+                    (user.username && user.username.toLowerCase().includes(lowerCaseSearchTerm)) || 
+                    (user.email && user.email.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                    (user.refId && user.refId.toLowerCase().includes(lowerCaseSearchTerm))
+                );
+            });
+            
+            if (filteredUsers.length === 0) {
+                 userList.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-4">কোনো ব্যবহারকারী পাওয়া যায়নি।</td></tr>';
+                 return;
+            }
+            
+            filteredUsers.forEach(([uid, user]) => {
+                // Count active referrals
+                let activeReferrals = 0;
+                if (user.referrals) {
+                    Object.keys(user.referrals).forEach(refUid => {
+                        if (allUsers[refUid] && allUsers[refUid].isAccountActive) {
+                            activeReferrals++;
+                        }
+                    });
+                }
+                
+                let statusHtml = user.isBanned ? '<span class="px-2 py-1 text-xs bg-gray-200 text-gray-800 rounded-full">Banned</span>' :
+                                 user.isAccountActive ? '<span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span>' : 
+                                 '<span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Inactive</span>';
+                
+                const tr = document.createElement('tr');
+                tr.className = 'user-row';
+                tr.dataset.uid = uid;
+                tr.innerHTML = `
+                    <td>${user.username || 'N/A'}</td>
+                    <td>${user.email || 'N/A'}</td>
+                    <td>${(user.balance || 0).toFixed(2)} ৳</td>
+                    <td>${user.premiumPlan || 'Basic'}</td>
+                    <td>${user.refId || 'N/A'}</td>
+                    <td>${activeReferrals}</td>
+                    <td>${statusHtml}</td>`;
+                userList.appendChild(tr);
+            });
+        }
+        
+        function loadAllTransactions() {
+            renderTransactions('all');
+        }
+        
+        function renderTransactions(type = 'all', searchTerm = '', dateFrom = '', dateTo = '') {
+            const transactionList = document.getElementById('transaction-list');
+            transactionList.innerHTML = '';
+            
+            let filteredTransactions = Object.entries(allTransactions);
+            
+            // Filter by type
+            if (type !== 'all') {
+                filteredTransactions = filteredTransactions.filter(([id, tx]) => tx.type === type);
+            }
+            
+            // Filter by date range
+            if (dateFrom) {
+                const fromDate = new Date(dateFrom);
+                filteredTransactions = filteredTransactions.filter(([id, tx]) => 
+                    new Date(tx.date) >= fromDate
+                );
+            }
+            
+            if (dateTo) {
+                const toDate = new Date(dateTo);
+                toDate.setHours(23, 59, 59, 999);
+                filteredTransactions = filteredTransactions.filter(([id, tx]) => 
+                    new Date(tx.date) <= toDate
+                );
+            }
+            
+            // Filter by search term
+            if (searchTerm) {
+                const searchLower = searchTerm.toLowerCase();
+                filteredTransactions = filteredTransactions.filter(([id, tx]) => {
+                    const user = allUsers[tx.userId];
+                    const username = user ? user.username : '';
+                    return (
+                        username.toLowerCase().includes(searchLower) ||
+                        (tx.trxId && tx.trxId.toLowerCase().includes(searchLower)) ||
+                        (tx.details && tx.details.toLowerCase().includes(searchLower))
+                    );
+                });
+            }
+            
+            // Sort by date (newest first)
+            filteredTransactions.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            
+            if (filteredTransactions.length === 0) {
+                transactionList.innerHTML = '<tr><td colspan="8" class="text-center text-gray-500 py-4">কোনো লেনদেন পাওয়া যায়নি।</td></tr>';
+                return;
+            }
+            
+            filteredTransactions.forEach(([id, tx]) => {
+                const user = allUsers[tx.userId];
+                const username = user ? user.username : 'Unknown';
+                const date = formatDate(tx.date);
+                const amount = Math.abs(tx.amount).toFixed(2);
+                
+                transactionList.innerHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${tx.type || 'N/A'}</td>
+                        <td>${username}</td>
+                        <td class="font-semibold">${amount}৳</td>
+                        <td>${tx.trxId || 'N/A'}</td>
+                        <td>${tx.method || 'N/A'}</td>
+                        <td>${getStatusBadge(tx.status || 'pending')}</td>
+                        <td class="max-w-xs truncate" title="${tx.details || ''}">${tx.details || ''}</td>
+                    </tr>
+                `;
+            });
+        }
+        
+        async function loadGmailSubmissions() {
+            showLoader();
+            try {
+                // Refresh Gmail submissions
+                allGmailSubmissions = {};
+                Object.entries(allUsers).forEach(([uid, user]) => {
+                    if (user.gmailSubmissions) {
+                        Object.entries(user.gmailSubmissions).forEach(([subId, submission]) => {
+                            allGmailSubmissions[subId] = {
+                                ...submission,
+                                userId: uid,
+                                username: user.username,
+                                submissionId: subId
+                            };
+                        });
+                    }
+                });
+                
+                renderGmailSubmissions();
+            } catch (error) {
+                console.error("Error loading Gmail submissions:", error);
+                alertUser("Gmail সাবমিশন লোড করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        function renderGmailSubmissions(statusFilter = 'all', dateFilter = '') {
+            const gmailList = document.getElementById('gmail-submission-list');
+            gmailList.innerHTML = '';
+            
+            let submissions = Object.values(allGmailSubmissions);
+            
+            // Filter by status
+            if (statusFilter !== 'all') {
+                submissions = submissions.filter(sub => sub.status === statusFilter);
+            }
+            
+            // Filter by date
+            if (dateFilter) {
+                const filterDate = new Date(dateFilter).toDateString();
+                submissions = submissions.filter(sub => 
+                    new Date(sub.date).toDateString() === filterDate
+                );
+            }
+            
+            // Sort by date (newest first)
+            submissions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (submissions.length === 0) {
+                gmailList.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-4">কোনো Gmail সাবমিশন পাওয়া যায়নি।</td></tr>';
+                return;
+            }
+            
+            submissions.forEach(sub => {
+                const date = formatDate(sub.date);
+                const statusBadge = getStatusBadge(sub.status || 'pending');
+                
+                let actionButtons = '';
+                if (sub.status === 'pending') {
+                    actionButtons = `
+                        <button class="approve-gmail-btn px-2 py-1 text-xs rounded-md btn-approve" 
+                                data-subid="${sub.submissionId}" 
+                                data-uid="${sub.userId}"
+                                data-price="${sub.price}">
+                            অনুমোদন
+                        </button>
+                        <button class="reject-gmail-btn px-2 py-1 text-xs rounded-md btn-reject" 
+                                data-subid="${sub.submissionId}" 
+                                data-uid="${sub.userId}">
+                            বাতিল
+                        </button>
+                    `;
+                } else {
+                    actionButtons = `<span class="text-gray-500">সম্পন্ন</span>`;
+                }
+                
+                gmailList.innerHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${sub.username || 'N/A'}</td>
+                        <td>${sub.email || 'N/A'}</td>
+                        <td>${sub.passwordUsed || 'N/A'}</td>
+                        <td>${sub.price || 0}৳</td>
+                        <td>${statusBadge}</td>
+                        <td>${actionButtons}</td>
+                    </tr>
+                `;
+            });
+        }
+        
+        function renderRequests() {
+            const withdrawalList = document.getElementById('withdrawal-list');
+            const activationList = document.getElementById('activation-list');
+            const planRequestList = document.getElementById('plan-request-list');
+            
+            withdrawalList.innerHTML = '';
+            activationList.innerHTML = '';
+            planRequestList.innerHTML = '';
+            
+            const pendingTransactions = Object.entries(allTransactions)
+                .filter(([id, tx]) => tx.status === 'pending')
+                .sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            
+            let hasWithdrawals = false, hasActivations = false, hasPlanRequests = false;
+            
+            pendingTransactions.forEach(([txId, tx]) => {
+                const user = allUsers[tx.userId];
+                if (!user) return;
+                
+                const date = formatDate(tx.date);
+                const actionButtons = `
+                    <td class="space-x-1">
+                        <button class="approve-btn text-xs px-2 py-1 rounded-md btn-approve" 
+                                data-txid="${txId}" 
+                                data-uid="${tx.userId}" 
+                                data-type="${tx.type}" 
+                                data-details='${JSON.stringify(tx)}'>
+                            Approve
+                        </button>
+                        <button class="reject-btn text-xs px-2 py-1 rounded-md btn-reject" 
+                                data-txid="${txId}" 
+                                data-uid="${tx.userId}" 
+                                data-amount="${tx.amount}" 
+                                data-type="${tx.type}">
+                            Reject
+                        </button>
+                    </td>`;
+                
+                if (tx.type === 'Withdrawal') {
+                    hasWithdrawals = true;
+                    let number = 'N/A';
+                    let method = tx.method || 'N/A'; 
+                    
+                    if (tx.details && tx.details.includes(' to ')) {
+                        const parts = tx.details.split(' to ');
+                        if (parts.length === 2) {
+                            method = parts[0].split(' ')[0];
+                            number = parts[1];
+                        }
+                    }
+                    
+                    withdrawalList.innerHTML += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${user.username}</td>
+                            <td class="font-semibold">${Math.abs(tx.amount).toFixed(2)} ৳</td>
+                            <td>${number}</td>
+                            <td>${method}</td>
+                            ${actionButtons}
+                        </tr>`;
+                } else if (tx.type === 'Activation') {
+                    hasActivations = true;
+                    const trxIdText = tx.trxId || (tx.details && tx.details.match(/\(([^)]+)\)/)?.[1]) || 'N/A';
+                    
+                    // Get referral info for activation requests
+                    let referredBy = 'N/A';
+                    let referralStatus = 'প্রযোজ্য নয়';
+                    let referralBonus = adminSettings?.referralBonus || 0;
+                    
+                    if (user.referredBy) {
+                        const referrer = allUsers[user.referredBy];
+                        referredBy = referrer ? referrer.username : user.referredBy;
+                        
+                        if (user.referralRewardGiven) {
+                            referralStatus = 'বোনাস দেওয়া হয়েছে';
+                        } else if (!user.isAccountActive) {
+                            referralStatus = 'বোনাস প্রযোজ্য';
+                        } else {
+                            referralStatus = 'অ্যাক্টিভ (বোনাস বাকি)';
+                        }
+                    }
+                    
+                    activationList.innerHTML += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${user.username}</td>
+                            <td>${trxIdText}</td>
+                            <td>${tx.method || 'N/A'}</td>
+                            <td>
+                                <div class="text-xs">
+                                    <div>রেফার করেছেন: ${referredBy}</div>
+                                    <div>বোনাস: ${referralBonus}৳</div>
+                                    <div class="${user.referredBy ? 'text-blue-600' : 'text-gray-500'}">
+                                        ${referralStatus}
+                                    </div>
+                                </div>
+                            </td>
+                            ${actionButtons}
+                        </tr>`;
+                } else if (tx.type === 'Plan Purchase') {
+                    hasPlanRequests = true;
+                    const trxIdText = tx.trxId || (tx.details && tx.details.match(/\(([^)]+)\)/)?.[1]) || 'N/A';
+                    planRequestList.innerHTML += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${user.username}</td>
+                            <td class="font-semibold">${tx.details || 'N/A'}</td>
+                            <td>${trxIdText}</td>
+                            <td>${tx.method || 'N/A'}</td>
+                            ${actionButtons}
+                        </tr>`;
+                }
+            });
+            
+            if (!hasWithdrawals) withdrawalList.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-4">কোনো পেন্ডিং উত্তোলন অনুরোধ নেই।</td></tr>';
+            if (!hasActivations) activationList.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-4">কোনো পেন্ডিং অ্যাক্টিভেশন অনুরোধ নেই।</td></tr>';
+            if (!hasPlanRequests) planRequestList.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-4">কোনো পেন্ডিং প্ল্যান অনুরোধ নেই।</td></tr>';
+        }
+
+        function renderTasks(tasks) {
+            const taskListDiv = document.getElementById('task-list');
+            taskListDiv.innerHTML = '';
+            
+            if (!tasks || Object.keys(tasks).length === 0) {
+                 taskListDiv.innerHTML = '<p class="text-center text-gray-500">কোনো টাস্ক যোগ করা হয়নি।</p>';
+                 return;
+            }
+            
+            Object.entries(tasks).forEach(([planId, taskGroup]) => {
+                const plan = Object.values(allPlans).find(p => p.id === planId);
+                const planName = plan ? plan.name : planId;
+                
+                if (taskGroup && typeof taskGroup === 'object') {
+                    taskListDiv.innerHTML += `<h3 class="font-bold text-lg mt-4 capitalize">${planName} Tasks</h3>`;
+                    
+                    Object.entries(taskGroup).forEach(([taskId, task]) => {
+                        const isActive = task.active !== false;
+                        const activeBadge = isActive ? 
+                            '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">সক্রিয়</span>' : 
+                            '<span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">নিষ্ক্রিয়</span>';
+                        
+                        taskListDiv.innerHTML += `
+                            <div class="flex justify-between items-center p-3 bg-gray-100 rounded mb-2">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <p class="font-semibold">${task.name} (${task.reward}৳)</p>
+                                        ${activeBadge}
+                                    </div>
+                                    <a href="${task.link}" target="_blank" class="text-xs text-indigo-600 hover:underline block truncate" title="${task.link}">
+                                        ${task.link}
+                                    </a>
+                                    ${task.dailyLimit ? `<p class="text-xs text-gray-600 mt-1">দৈনিক লিমিট: ${task.dailyLimit}</p>` : ''}
+                                    ${task.cooldown ? `<p class="text-xs text-gray-600">কুলডাউন: ${task.cooldown} মিনিট</p>` : ''}
+                                </div>
+                                <button class="delete-task-btn text-red-500 flex-shrink-0 ml-2" 
+                                        data-planid="${planId}" 
+                                        data-taskid="${taskId}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>`;
+                    });
+                }
+            });
+        }
+        
+        function renderPlans(plans) {
+            const planListDiv = document.getElementById('plan-list');
+            const taskPlanSelect = document.getElementById('task-plan');
+            
+            planListDiv.innerHTML = '';
+            taskPlanSelect.innerHTML = '<option value="basic" selected>সাধারণ টাস্ক (Normal)</option>';
+            
+            if (!plans || Object.keys(plans).length === 0) {
+                 planListDiv.innerHTML = '<p class="text-center text-gray-500">কোনো প্ল্যান যোগ করা হয়নি।</p>';
+                 return;
+            }
+            
+            Object.entries(plans).forEach(([planId, plan]) => {
+                plan.id = planId; // Attach the key as an id
+                
+                planListDiv.innerHTML += `
+                    <div class="flex justify-between items-center p-3 bg-gray-100 rounded mb-2">
+                        <div>
+                            <span class="font-semibold">${plan.name}</span>
+                            <p class="text-sm text-gray-600">
+                                মূল্য: ${plan.price}৳ | মেয়াদ: ${plan.durationDays} দিন
+                            </p>
+                            ${plan.description ? `<p class="text-xs text-gray-500 mt-1">${plan.description}</p>` : ''}
+                        </div>
+                        <button class="delete-plan-btn text-red-500" data-planid="${planId}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>`;
+                
+                taskPlanSelect.innerHTML += `<option value="${planId}">${plan.name}</option>`;
+            });
+        }
+
+        function renderSettings(settings) {
+            document.getElementById('site-name').value = settings.siteName || '';
+            document.getElementById('sidebar-site-name').textContent = settings.siteName || 'Admin Panel';
+            document.getElementById('activation-fee').value = settings.activationFee || '';
+            document.getElementById('referral-bonus').value = settings.referralBonus || '';
+            document.getElementById('bkash-number').value = settings.paymentInfo?.bkash || '';
+            document.getElementById('nagad-number').value = settings.paymentInfo?.nagad || '';
+            
+            // Withdrawal settings
+            document.getElementById('normal-min-amount').value = settings.withdrawSettings?.normal?.minAmount || '';
+            document.getElementById('normal-min-refs').value = settings.withdrawSettings?.normal?.minRefs || '';
+            document.getElementById('vip-min-amount').value = settings.withdrawSettings?.vip?.minAmount || '';
+            document.getElementById('vip-min-refs').value = settings.withdrawSettings?.vip?.minRefs || '';
+            
+            document.getElementById('welcome-inactive').value = settings.messages?.welcomeInactive || '';
+            document.getElementById('welcome-active').value = settings.messages?.welcomeActive || '';
+            document.getElementById('popup-link').value = settings.popupLink || '';
+        }
+        
+        function renderGmailSettings(settings) {
+            document.getElementById('gmail-password').value = settings.gmailSettings?.password || '';
+            document.getElementById('gmail-price').value = settings.gmailSettings?.price || '';
+            document.getElementById('gmail-global-limit').value = settings.gmailSettings?.globalLimit || '';
+            document.getElementById('today-count-display').textContent = settings.gmailSettings?.todayCount || 0;
+        }
+        
+        async function loadReferralData() {
+            try {
+                const referralList = document.getElementById('referral-list');
+                referralList.innerHTML = '';
+                
+                let totalReferrals = 0;
+                let activeReferrals = 0;
+                let totalReferralIncome = 0;
+                
+                // Calculate referral stats
+                Object.entries(allUsers).forEach(([uid, user]) => {
+                    if (user.referrals) {
+                        const refCount = Object.keys(user.referrals).length;
+                        totalReferrals += refCount;
+                        
+                        // Count active referrals
+                        let userActiveRefs = 0;
+                        Object.keys(user.referrals).forEach(refUid => {
+                            if (allUsers[refUid] && allUsers[refUid].isAccountActive) {
+                                userActiveRefs++;
+                                activeReferrals++;
+                            }
+                        });
+                        
+                        // Calculate referral income (assuming activation fee)
+                        const referralIncome = userActiveRefs * (adminSettings.activationFee || 0);
+                        totalReferralIncome += referralIncome;
+                        
+                        referralList.innerHTML += `
+                            <tr>
+                                <td>${user.refId || 'N/A'}</td>
+                                <td>${user.username || 'N/A'}</td>
+                                <td>${refCount}</td>
+                                <td>${userActiveRefs}</td>
+                                <td>${referralIncome}৳</td>
+                            </tr>
+                        `;
+                    }
+                });
+                
+                if (referralList.innerHTML === '') {
+                    referralList.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500 py-4">কোনো রেফারেল ডাটা পাওয়া যায়নি।</td></tr>';
+                }
+                
+                // Update stats
+                document.getElementById('total-ref-count').textContent = totalReferrals;
+                document.getElementById('active-ref-count').textContent = activeReferrals;
+                document.getElementById('referral-income').textContent = totalReferralIncome.toFixed(2);
+                
+                // Render referral challenges
+                renderReferralChallenges();
+                
+            } catch (error) {
+                console.error("Error loading referral data:", error);
+            }
+        }
+        
+        function renderReferralChallenges() {
+            const challengesList = document.getElementById('challenges-list');
+            challengesList.innerHTML = '';
+            
+            const challenges = adminSettings.referralChallenges || [];
+            
+            if (challenges.length === 0) {
+                challengesList.innerHTML = '<p class="text-gray-500 text-sm">কোনো চ্যালেঞ্জ যোগ করা হয়নি।</p>';
+                return;
+            }
+            
+            challenges.forEach((challenge, index) => {
+                challengesList.innerHTML += `
+                    <div class="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                        <div class="flex-1">
+                            <input type="number" data-index="${index}" data-field="target" 
+                                   value="${challenge.target || 0}" 
+                                   class="w-full border p-1 rounded text-sm" placeholder="টার্গেট">
+                        </div>
+                        <div class="flex-1">
+                            <input type="number" data-index="${index}" data-field="reward" 
+                                   value="${challenge.reward || 0}" 
+                                   class="w-full border p-1 rounded text-sm" placeholder="রিওয়ার্ড">
+                        </div>
+                        <button type="button" class="remove-challenge-btn text-red-500" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+        
+        // --- Event Listeners & Handlers ---
+        function setupEventListeners() {
+            // User search
+            document.getElementById('user-search').addEventListener('input', (e) => renderUsers(e.target.value));
+            
+            // User list click
+            document.getElementById('user-list').addEventListener('click', (e) => {
+                const row = e.target.closest('.user-row');
+                if (row) openUserManagementModal(row.dataset.uid);
+            });
+            
+            // Close modal buttons
+            document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', () => {
+                btn.closest('.modal-backdrop').style.display = 'none';
+            }));
+            
+            document.querySelectorAll('.close-gmail-modal-btn').forEach(btn => btn.addEventListener('click', () => {
+                gmailDetailModal.style.display = 'none';
+            }));
+            
+            // Request actions
+            document.querySelector('#requests').addEventListener('click', handleRequestAction);
+            
+            // Settings form
+            document.getElementById('settings-form').addEventListener('submit', handleSaveAllSettings);
+            
+            // Gmail settings form
+            document.getElementById('gmail-settings-form').addEventListener('submit', handleSaveGmailSettings);
+            
+            // Gmail status filter
+            document.getElementById('gmail-status-filter').addEventListener('change', (e) => {
+                const dateFilter = document.getElementById('gmail-date-filter').value;
+                renderGmailSubmissions(e.target.value, dateFilter);
+            });
+            
+            // Gmail date filter
+            document.getElementById('gmail-date-filter').addEventListener('change', (e) => {
+                const statusFilter = document.getElementById('gmail-status-filter').value;
+                renderGmailSubmissions(statusFilter, e.target.value);
+            });
+            
+            // Reset today count
+            document.getElementById('reset-today-count').addEventListener('click', resetTodayGmailCount);
+            
+            // Gmail list actions
+            document.getElementById('gmail-submission-list').addEventListener('click', handleGmailAction);
+            
+            // Task form
+            document.getElementById('add-task-form').addEventListener('submit', handleAddTask);
+            
+            // Plan form
+            document.getElementById('add-plan-form').addEventListener('submit', handleAddPlan);
+            
+            // Task delete
+            document.getElementById('task-list').addEventListener('click', handleDeleteTask);
+            
+            // Plan delete
+            document.getElementById('plan-list').addEventListener('click', handleDeletePlan);
+            
+            // Referral settings form
+            document.getElementById('referral-settings-form').addEventListener('submit', handleSaveReferralSettings);
+            
+            // Add challenge button
+            document.getElementById('add-challenge-btn').addEventListener('click', addReferralChallenge);
+            
+            // Remove challenge button (delegated)
+            document.getElementById('challenges-list').addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.remove-challenge-btn');
+                if (removeBtn) {
+                    const index = parseInt(removeBtn.dataset.index);
+                    removeReferralChallenge(index);
+                }
+            });
+            
+            // Transaction tabs
+            document.querySelectorAll('#transactions .tab-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#transactions .tab-button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const type = btn.dataset.type;
+                    const search = document.getElementById('transaction-search').value;
+                    const dateFrom = document.getElementById('transaction-date-from').value;
+                    const dateTo = document.getElementById('transaction-date-to').value;
+                    renderTransactions(type, search, dateFrom, dateTo);
+                });
+            });
+            
+            // Request tabs
+            document.querySelectorAll('#requests .tab-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#requests .tab-button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const tab = btn.dataset.tab;
+                    document.querySelectorAll('#requests .tab-content').forEach(c => c.classList.add('hidden'));
+                    document.getElementById(`${tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Transaction search
+            document.getElementById('transaction-search').addEventListener('input', (e) => {
+                const activeTab = document.querySelector('#transactions .tab-button.active');
+                const type = activeTab ? activeTab.dataset.type : 'all';
+                const dateFrom = document.getElementById('transaction-date-from').value;
+                const dateTo = document.getElementById('transaction-date-to').value;
+                renderTransactions(type, e.target.value, dateFrom, dateTo);
+            });
+            
+            // Transaction date filters
+            ['transaction-date-from', 'transaction-date-to'].forEach(id => {
+                document.getElementById(id).addEventListener('change', () => {
+                    const activeTab = document.querySelector('#transactions .tab-button.active');
+                    const type = activeTab ? activeTab.dataset.type : 'all';
+                    const search = document.getElementById('transaction-search').value;
+                    const dateFrom = document.getElementById('transaction-date-from').value;
+                    const dateTo = document.getElementById('transaction-date-to').value;
+                    renderTransactions(type, search, dateFrom, dateTo);
+                });
+            });
+        }
+
+        function handleRequestAction(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+            
+            const { txid, uid, amount, type, details } = button.dataset;
+            
+            if (button.classList.contains('approve-btn')) {
+                handleApproveRequest(txid, uid, type, details ? JSON.parse(details) : {});
+            } else if (button.classList.contains('reject-btn')) {
+                handleRejectRequest(txid, uid, type, amount);
+            }
+        }
+
+        // --- UPDATED: Activation Approval with Referral Reward Logic ---
+        async function handleApproveRequest(txId, userId, type, txDetails) {
+            showLoader();
+            try {
+                const updates = {};
+                updates[`transactions/${txId}/status`] = 'approved';
+
+                if (type === 'Activation') {
+                    updates[`users/${userId}/isAccountActive`] = true;
+                    
+                    // NEW: Check and apply referral reward
+                    const userSnap = await db.ref(`users/${userId}`).once('value');
+                    const userData = userSnap.val();
+                    
+                    // Check if user has referrer and hasn't received reward yet
+                    if (userData.referredBy && userData.referralRewardGiven !== true) {
+                        const referrerId = userData.referredBy;
+                        const referrerSnap = await db.ref(`users/${referrerId}`).once('value');
+                        const referrerData = referrerSnap.val();
+                        
+                        if (referrerData) {
+                            // Get referral bonus from admin settings
+                            const adminSnap = await db.ref('admin').once('value');
+                            const adminData = adminSnap.val();
+                            const referralBonus = adminData?.referralBonus || 0;
+                            
+                            if (referralBonus > 0) {
+                                // Add bonus to referrer's balance
+                                const newBalance = (referrerData.balance || 0) + referralBonus;
+                                updates[`users/${referrerId}/balance`] = newBalance;
+                                
+                                // Mark referral as active in referrer's referrals list
+                                updates[`users/${referrerId}/referrals/${userId}`] = true;
+                                
+                                // Prevent duplicate reward
+                                updates[`users/${userId}/referralRewardGiven`] = true;
+                                
+                                // Create referral reward transaction log (optional)
+                                const referralTransactionId = `ref_${Date.now()}_${userId}`;
+                                updates[`transactions/${referralTransactionId}`] = {
+                                    type: "Referral Reward",
+                                    amount: referralBonus,
+                                    fromUser: userId,
+                                    fromUserName: userData.username,
+                                    toUser: referrerId,
+                                    toUserName: referrerData.username,
+                                    date: new Date().toISOString(),
+                                    status: "completed",
+                                    details: `Referral bonus for activating ${userData.username}`
+                                };
+                                
+                                console.log(`Referral bonus applied: ${referralBonus}৳ from ${userData.username} to ${referrerData.username}`);
+                            }
+                        }
+                    }
+                } else if (type === 'Plan Purchase') {
+                    const detailsString = txDetails.details;
+                    let foundPlan = null;
+                    let longestMatchLength = 0;
+                    
+                    for (const plan of Object.values(allPlans)) {
+                        if (detailsString.toLowerCase().includes(plan.name.toLowerCase())) {
+                            if (plan.name.length > longestMatchLength) {
+                                longestMatchLength = plan.name.length;
+                                foundPlan = plan;
+                            }
+                        }
+                    }
+                    
+                    if (foundPlan) {
+                        const expiryDate = new Date();
+                        expiryDate.setDate(expiryDate.getDate() + parseInt(foundPlan.durationDays));
+                        updates[`users/${userId}/premiumPlan`] = foundPlan.name;
+                        updates[`users/${userId}/planExpiryDate`] = expiryDate.toISOString();
+                    } else {
+                        throw new Error(`অনুরোধের বিবরণ থেকে কোনো সক্রিয় প্ল্যান খুঁজে পাওয়া যায়নি।`);
+                    }
+                } else if (type === 'Withdrawal') {
+                    const userSnap = await db.ref(`users/${userId}`).once('value');
+                    const userData = userSnap.val();
+                    updates[`users/${userId}/totalWithdraw`] = (userData.totalWithdraw || 0) + Math.abs(parseFloat(txDetails.amount));
+                }
+
+                await db.ref().update(updates);
+                alertUser(`${type} অনুরোধটি সফলভাবে অনুমোদিত হয়েছে।`);
+                await loadAllData();
+            } catch (error) {
+                alertUser(`অনুরোধ অনুমোদনে সমস্যা হয়েছে: ${error.message}`, true);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function handleRejectRequest(txId, userId, type, amount) {
+            showLoader();
+            try {
+                if (type === 'Withdrawal') {
+                    await db.ref(`users/${userId}/balance`).transaction(bal => (bal || 0) + Math.abs(parseFloat(amount)));
+                }
+                await db.ref(`transactions/${txId}/status`).set('rejected');
+                alertUser(`${type} অনুরোধটি বাতিল করা হয়েছে।`);
+                await loadAllData();
+            } catch (error) {
+                alertUser("অনুরোধ বাতিলের সময় একটি সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function openUserManagementModal(uid) {
+            const user = allUsers[uid];
+            if (!user) return;
+            
+            const modalTitle = document.getElementById('user-modal-title');
+            modalTitle.textContent = `ব্যবহারকারী ম্যানেজমেন্ট - ${user.username}`;
+            
+            // Set up tab switching
+            const tabButtons = userManagementModal.querySelectorAll('.tab-button');
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const tab = this.dataset.tab;
+                    loadUserTabContent(uid, tab);
+                });
+            });
+            
+            // Load initial tab content
+            loadUserTabContent(uid, 'overview');
+            userManagementModal.style.display = 'flex';
+        }
+        
+        async function loadUserTabContent(uid, tab) {
+            const user = allUsers[uid];
+            if (!user) return;
+            
+            const modalContent = document.getElementById('user-modal-content');
+            
+            switch(tab) {
+                case 'overview':
+                    await loadUserOverview(uid, modalContent);
+                    break;
+                case 'transactions':
+                    await loadUserTransactions(uid, modalContent);
+                    break;
+                case 'gmail':
+                    await loadUserGmailSubmissions(uid, modalContent);
+                    break;
+                case 'referrals':
+                    await loadUserReferrals(uid, modalContent);
+                    break;
+                case 'tasks':
+                    await loadUserTasks(uid, modalContent);
+                    break;
+            }
+        }
+        
+        async function loadUserOverview(uid, container) {
+            const user = allUsers[uid];
+            const planOptions = Object.values(allPlans).map(plan => 
+                `<option value="${plan.name}" ${user.premiumPlan === plan.name ? 'selected' : ''}>${plan.name}</option>`
+            ).join('');
+            
+            // Count referrals
+            let referralCount = 0;
+            let activeReferrals = 0;
+            if (user.referrals) {
+                referralCount = Object.keys(user.referrals).length;
+                activeReferrals = Object.keys(user.referrals).filter(refUid => 
+                    allUsers[refUid] && allUsers[refUid].isAccountActive
+                ).length;
+            }
+            
+            // Get referrer info
+            let referredByInfo = 'কেউ নেই';
+            let referralRewardStatus = 'প্রযোজ্য নয়';
+            
+            if (user.referredBy) {
+                const referrer = allUsers[user.referredBy];
+                referredByInfo = referrer ? `${referrer.username} (${user.referredBy})` : user.referredBy;
+                
+                if (user.referralRewardGiven) {
+                    referralRewardStatus = 'হ্যাঁ';
+                } else if (user.isAccountActive) {
+                    referralRewardStatus = 'না (প্রযোজ্য)';
+                } else {
+                    referralRewardStatus = 'না (অ্যাক্টিভেশন বাকি)';
+                }
+            }
+            
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-lg font-bold">ব্যবহারকারী তথ্য</p>
+                            <p class="text-sm text-gray-600">নাম: ${user.fullname || 'N/A'}</p>
+                            <p class="text-sm text-gray-600">ইমেইল: ${user.email || 'N/A'}</p>
+                            <p class="text-sm text-gray-600">যোগদান তারিখ: ${formatDate(user.joinDate)}</p>
+                            <p class="text-sm text-gray-600">রেফারেল আইডি: ${user.refId || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <p class="text-lg font-bold">আর্থিক তথ্য</p>
+                            <p class="text-sm text-gray-600">ব্যালেন্স: ${(user.balance || 0).toFixed(2)} ৳</p>
+                            <p class="text-sm text-gray-600">মোট উত্তোলন: ${(user.totalWithdraw || 0).toFixed(2)} ৳</p>
+                            <p class="text-sm text-gray-600">উত্তোলন সংখ্যা: ${user.withdrawCount || 0}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- UPDATED: Referral Information Section -->
+                    <div class="p-3 bg-gray-50 rounded-md border">
+                        <p class="font-semibold mb-2">রেফারেল তথ্য</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                                <p class="text-sm text-gray-600">রেফার করেছেন: ${referredByInfo}</p>
+                                <p class="text-sm text-gray-600">রেফারেল বোনাস পেয়েছেন: ${referralRewardStatus}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">মোট রেফারেল: ${referralCount}</p>
+                                <p class="text-sm text-gray-600">সক্রিয় রেফারেল: ${activeReferrals}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-3 bg-gray-50 rounded-md border">
+                        <p class="font-semibold">বর্তমান ব্যালেন্স: ${(user.balance || 0).toFixed(2)} ৳</p>
+                        <div class="flex items-center space-x-2 mt-2">
+                            <input type="number" id="balance-update-amount" placeholder="পরিমাণ" class="w-full border p-1 rounded-md">
+                            <button id="add-balance-btn" class="px-3 py-1 bg-green-500 text-white rounded-md text-sm">যোগ</button>
+                            <button id="subtract-balance-btn" class="px-3 py-1 bg-yellow-600 text-white rounded-md text-sm">বিয়োগ</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                       <div class="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
+                           <label for="active-toggle" class="font-semibold">অ্যাকাউন্ট সক্রিয়</label>
+                           <input type="checkbox" id="active-toggle" class="form-checkbox h-5 w-5 text-purple-600" ${user.isAccountActive ? 'checked' : ''}>
+                       </div>
+                       <div class="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
+                           <label for="ban-toggle" class="font-semibold">অ্যাকাউন্ট ব্যান</label>
+                           <input type="checkbox" id="ban-toggle" class="form-checkbox h-5 w-5 text-red-600" ${user.isBanned ? 'checked' : ''}>
+                       </div>
+                    </div>
+                    
+                    <div class="p-3 bg-gray-50 rounded-md border">
+                        <label for="vip-plan-select" class="font-semibold block mb-2">VIP প্ল্যান</label>
+                        <select id="vip-plan-select" class="w-full border p-2 rounded-md">
+                            <option value="">কোনো প্ল্যান নেই (None)</option>
+                            ${planOptions}
+                        </select>
+                    </div>
+                    
+                    <div class="flex justify-between items-center pt-4 border-t mt-4">
+                        <button id="save-user-changes-btn" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-lg">সেভ করুন</button>
+                        <button id="reset-password-btn" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">পাসওয়ার্ড রিসেট</button>
+                        <button id="delete-user-btn" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg">ডিলিট</button>
+                    </div>
+                </div>`;
+            
+            // Attach event listeners for this modal
+            document.getElementById('add-balance-btn').onclick = () => handleBalanceUpdate(uid, true);
+            document.getElementById('subtract-balance-btn').onclick = () => handleBalanceUpdate(uid, false);
+            document.getElementById('save-user-changes-btn').onclick = () => handleSaveUserChanges(uid);
+            document.getElementById('reset-password-btn').onclick = () => handleResetPassword(uid);
+            document.getElementById('delete-user-btn').onclick = () => handleDeleteUser(uid, user.username);
+        }
+        
+        async function loadUserTransactions(uid, container) {
+            const userTransactions = Object.entries(allTransactions)
+                .filter(([id, tx]) => tx.userId === uid)
+                .sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            
+            if (userTransactions.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">এই ব্যবহারকারীর কোনো লেনদেন নেই।</p>';
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr>
+                                <th>তারিখ</th>
+                                <th>ধরণ</th>
+                                <th>পরিমাণ</th>
+                                <th>TrxID</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>বিবরণ</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+            
+            userTransactions.forEach(([id, tx]) => {
+                const date = formatDate(tx.date);
+                const amount = Math.abs(tx.amount).toFixed(2);
+                const statusBadge = getStatusBadge(tx.status || 'pending');
+                
+                tableHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${tx.type || 'N/A'}</td>
+                        <td class="font-semibold">${amount}৳</td>
+                        <td>${tx.trxId || 'N/A'}</td>
+                        <td>${statusBadge}</td>
+                        <td class="max-w-xs truncate" title="${tx.details || ''}">${tx.details || ''}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `</tbody></table></div>`;
+            container.innerHTML = tableHTML;
+        }
+        
+        async function loadUserGmailSubmissions(uid, container) {
+            const user = allUsers[uid];
+            const submissions = Object.entries(user.gmailSubmissions || {})
+                .sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            
+            if (submissions.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">এই ব্যবহারকারীর কোনো Gmail সাবমিশন নেই।</p>';
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr>
+                                <th>তারিখ</th>
+                                <th>Gmail ঠিকানা</th>
+                                <th>ব্যবহৃত পাসওয়ার্ড</th>
+                                <th>মূল্য</th>
+                                <th>স্ট্যাটাস</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+            
+            submissions.forEach(([id, sub]) => {
+                const date = formatDate(sub.date);
+                const statusBadge = getStatusBadge(sub.status || 'pending');
+                
+                tableHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${sub.email || 'N/A'}</td>
+                        <td>${sub.passwordUsed || 'N/A'}</td>
+                        <td>${sub.price || 0}৳</td>
+                        <td>${statusBadge}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `</tbody></table></div>`;
+            container.innerHTML = tableHTML;
+        }
+        
+        async function loadUserReferrals(uid, container) {
+            const user = allUsers[uid];
+            
+            if (!user.referrals || Object.keys(user.referrals).length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">এই ব্যবহারকারীর কোনো রেফারেল নেই।</p>';
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr>
+                                <th>ব্যবহারকারী</th>
+                                <th>ইমেইল</th>
+                                <th>যোগদান তারিখ</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>ব্যালেন্স</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+            
+            Object.keys(user.referrals).forEach(refUid => {
+                const refUser = allUsers[refUid];
+                if (!refUser) return;
+                
+                const joinDate = formatDate(refUser.joinDate);
+                const status = refUser.isAccountActive ? 'সক্রিয়' : 'নিষ্ক্রিয়';
+                const statusClass = refUser.isAccountActive ? 'text-green-600' : 'text-red-600';
+                
+                tableHTML += `
+                    <tr>
+                        <td>${refUser.username || 'N/A'}</td>
+                        <td>${refUser.email || 'N/A'}</td>
+                        <td>${joinDate}</td>
+                        <td class="${statusClass} font-semibold">${status}</td>
+                        <td>${(refUser.balance || 0).toFixed(2)}৳</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `</tbody></table></div>`;
+            container.innerHTML = tableHTML;
+        }
+        
+        async function loadUserTasks(uid, container) {
+            const user = allUsers[uid];
+            const completedTasks = user.completedTasks || {};
+            
+            // Get all tasks
+            const allTasks = {};
+            const tasksSnapshot = await db.ref('tasks').once('value');
+            const tasksData = tasksSnapshot.val() || {};
+            
+            Object.entries(tasksData).forEach(([planId, taskGroup]) => {
+                if (taskGroup && typeof taskGroup === 'object') {
+                    Object.entries(taskGroup).forEach(([taskId, task]) => {
+                        allTasks[taskId] = { ...task, planId, taskId };
+                    });
+                }
+            });
+            
+            if (Object.keys(completedTasks).length === 0) {
+                container.innerHTML = `
+                    <p class="text-center text-gray-500 py-4">এই ব্যবহারকারী কোনো টাস্ক সম্পন্ন করেনি।</p>
+                    <button id="reset-tasks-btn" class="w-full px-4 py-2 bg-yellow-500 text-white rounded-md">
+                        সকল টাস্ক রিসেট করুন
+                    </button>`;
+                
+                document.getElementById('reset-tasks-btn').onclick = () => handleResetUserTasks(uid);
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="mb-4">
+                    <p class="font-semibold mb-2">সম্পন্ন টাস্কসমূহ: ${Object.keys(completedTasks).length}</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr>
+                                <th>টাস্কের নাম</th>
+                                <th>রিওয়ার্ড</th>
+                                <th>প্ল্যান</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+            
+            Object.keys(completedTasks).forEach(taskId => {
+                const task = allTasks[taskId];
+                if (!task) return;
+                
+                const planName = task.planId === 'basic' ? 'সাধারণ' : 
+                               allPlans[task.planId]?.name || task.planId;
+                
+                tableHTML += `
+                    <tr>
+                        <td>${task.name || 'N/A'}</td>
+                        <td>${task.reward || 0}৳</td>
+                        <td>${planName}</td>
+                        <td>
+                            <button class="remove-task-btn px-2 py-1 text-xs bg-red-100 text-red-800 rounded" 
+                                    data-taskid="${taskId}" data-uid="${uid}">
+                                মুছুন
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `</tbody></table></div>
+                <button id="reset-all-tasks-btn" class="w-full mt-4 px-4 py-2 bg-yellow-500 text-white rounded-md">
+                    সকল টাস্ক রিসেট করুন
+                </button>`;
+            
+            container.innerHTML = tableHTML;
+            
+            // Attach event listeners
+            document.getElementById('reset-all-tasks-btn').onclick = () => handleResetUserTasks(uid);
+            container.addEventListener('click', (e) => {
+                const btn = e.target.closest('.remove-task-btn');
+                if (btn) {
+                    const { taskid, uid } = btn.dataset;
+                    handleRemoveUserTask(uid, taskid);
+                }
+            });
+        }
+        
+        async function handleBalanceUpdate(uid, isAdding) {
+            const amountInput = document.getElementById('balance-update-amount');
+            const amount = parseFloat(amountInput.value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alertUser('সঠিক পরিমাণ দিন।', true);
+                return;
+            }
+            
+            const updateAmount = isAdding ? amount : -amount;
+            showLoader();
+            
+            try {
+                const result = await db.ref(`users/${uid}/balance`).transaction(bal => (bal || 0) + updateAmount);
+                alertUser('ব্যালেন্স আপডেট হয়েছে।');
+                
+                // Update local state
+                allUsers[uid].balance = result.snapshot.val();
+                
+                // Update UI
+                const balanceElement = document.querySelector('#user-modal-content .text-sm.text-gray-600:nth-child(2)');
+                if (balanceElement) {
+                    balanceElement.textContent = `ব্যালেন্স: ${allUsers[uid].balance.toFixed(2)} ৳`;
+                }
+                
+                amountInput.value = '';
+                await renderUsers();
+            } catch(e) {
+                alertUser('ব্যালেন্স আপডেট করতে সমস্যা হয়েছে।', true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleSaveUserChanges(uid) {
+            showLoader();
+            try {
+                const isAccountActive = document.getElementById('active-toggle').checked;
+                const isBanned = document.getElementById('ban-toggle').checked;
+                const selectedPlanName = document.getElementById('vip-plan-select').value;
+                
+                const updates = { 
+                    isAccountActive, 
+                    isBanned, 
+                    premiumPlan: selectedPlanName || null 
+                };
+                
+                if (selectedPlanName) {
+                    const planEntry = Object.values(allPlans).find(p => p.name === selectedPlanName);
+                    if (planEntry) {
+                        const expiryDate = new Date();
+                        expiryDate.setDate(expiryDate.getDate() + parseInt(planEntry.durationDays));
+                        updates.planExpiryDate = expiryDate.toISOString();
+                    }
+                } else {
+                    updates.planExpiryDate = null;
+                }
+                
+                await db.ref(`users/${uid}`).update(updates);
+                alertUser('ব্যবহারকারীর তথ্য আপডেট করা হয়েছে।');
+                await loadAllData();
+            } catch (e) {
+                alertUser('তথ্য আপডেট করতে সমস্যা হয়েছে।', true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleResetPassword(uid) {
+            const newPassword = prompt("নতুন পাসওয়ার্ড দিন:");
+            if (!newPassword) return;
+            
+            if (newPassword.length < 6) {
+                alertUser("পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে।", true);
+                return;
+            }
+            
+            showLoader();
+            try {
+                await db.ref(`users/${uid}/password`).set(newPassword);
+                alertUser("পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে।");
+            } catch (e) {
+                alertUser("পাসওয়ার্ড রিসেট করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleDeleteUser(uid, username) {
+            if (!confirm(`আপনি কি সত্যিই ${username} কে ডিলিট করতে চান? এই প্রক্রিয়াটি আর ফেরানো যাবে না।`)) {
+                return;
+            }
+            
+            showLoader();
+            try {
+                // Remove user data
+                await db.ref(`users/${uid}`).remove();
+                
+                // Remove user's referral from referrer
+                Object.values(allUsers).forEach(async (user) => {
+                    if (user.referrals && user.referrals[uid]) {
+                        await db.ref(`users/${user.uid}/referrals/${uid}`).remove();
+                    }
+                });
+                
+                alertUser('ব্যবহারকারীকে সফলভাবে ডিলিট করা হয়েছে।');
+                userManagementModal.style.display = 'none';
+                await loadAllData();
+            } catch (e) {
+                alertUser('ব্যবহারকারীকে ডিলিট করতে সমস্যা হয়েছে।', true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleResetUserTasks(uid) {
+            if (!confirm("আপনি কি এই ব্যবহারকারীর সকল সম্পন্ন টাস্ক রিসেট করতে চান?")) return;
+            
+            showLoader();
+            try {
+                await db.ref(`users/${uid}/completedTasks`).remove();
+                alertUser("সকল টাস্ক রিসেট করা হয়েছে।");
+                await loadUserTasks(uid, document.getElementById('user-modal-content'));
+            } catch (e) {
+                alertUser("টাস্ক রিসেট করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleRemoveUserTask(uid, taskId) {
+            if (!confirm("আপনি কি এই টাস্কটি ব্যবহারকারীর তালিকা থেকে মুছতে চান?")) return;
+            
+            showLoader();
+            try {
+                await db.ref(`users/${uid}/completedTasks/${taskId}`).remove();
+                alertUser("টাস্ক মুছে ফেলা হয়েছে।");
+                await loadUserTasks(uid, document.getElementById('user-modal-content'));
+            } catch (e) {
+                alertUser("টাস্ক মুছতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleSaveAllSettings(e) {
+            e.preventDefault();
+            showLoader();
+            
+            try {
+                const adminPassword = document.getElementById('admin-password-change').value;
+                const settings = {
+                    siteName: document.getElementById('site-name').value.trim(),
+                    activationFee: parseFloat(document.getElementById('activation-fee').value) || 0,
+                    referralBonus: parseFloat(document.getElementById('referral-bonus').value) || 0,
+                    minWithdrawAmount: parseFloat(document.getElementById('min-withdraw-amount').value) || 0,
+                    minActiveRefsForWithdraw: parseInt(document.getElementById('min-active-refs').value) || 0,
+                    popupLink: document.getElementById('popup-link').value.trim(),
+                    paymentInfo: {
+                        bkash: document.getElementById('bkash-number').value.trim(),
+                        nagad: document.getElementById('nagad-number').value.trim()
+                    },
+                    messages: {
+                        welcomeInactive: document.getElementById('welcome-inactive').value.trim(),
+                        welcomeActive: document.getElementById('welcome-active').value.trim()
+                    },
+                    withdrawSettings: {
+                        normal: {
+                            minAmount: parseFloat(document.getElementById('normal-min-amount').value) || 0,
+                            minRefs: parseInt(document.getElementById('normal-min-refs').value) || 0
+                        },
+                        vip: {
+                            minAmount: parseFloat(document.getElementById('vip-min-amount').value) || 0,
+                            minRefs: parseInt(document.getElementById('vip-min-refs').value) || 0
+                        }
+                    }
+                };
+                
+                // Update admin password if provided
+                if (adminPassword) {
+                    settings.password = adminPassword;
+                }
+                
+                await db.ref('admin').update(settings);
+                alertUser("সকল সেটিংস সফলভাবে সেভ হয়েছে।");
+                renderSettings(settings);
+                adminSettings = { ...adminSettings, ...settings };
+            } catch (error) {
+                alertUser("সেটিংস সেভ করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleSaveGmailSettings(e) {
+            e.preventDefault();
+            showLoader();
+            
+            try {
+                const gmailSettings = {
+                    password: document.getElementById('gmail-password').value.trim(),
+                    price: parseFloat(document.getElementById('gmail-price').value) || 0,
+                    globalLimit: parseInt(document.getElementById('gmail-global-limit').value) || 0,
+                    todayCount: adminSettings.gmailSettings?.todayCount || 0
+                };
+                
+                await db.ref('admin/gmailSettings').update(gmailSettings);
+                alertUser("Gmail সেটিংস সফলভাবে সেভ হয়েছে।");
+                renderGmailSettings({ ...adminSettings, gmailSettings });
+            } catch (error) {
+                alertUser("Gmail সেটিংস সেভ করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function resetTodayGmailCount() {
+            if (!confirm("আপনি কি আজকের Gmail গণনা রিসেট করতে চান?")) return;
+            
+            showLoader();
+            try {
+                await db.ref('admin/gmailSettings/todayCount').set(0);
+                alertUser("আজকের গণনা রিসেট করা হয়েছে।");
+                adminSettings.gmailSettings.todayCount = 0;
+                renderGmailSettings(adminSettings);
+            } catch (error) {
+                alertUser("গণনা রিসেট করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        function handleGmailAction(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+            
+            if (button.classList.contains('approve-gmail-btn')) {
+                const { subid, uid, price } = button.dataset;
+                handleApproveGmailSubmission(subid, uid, parseFloat(price));
+            } else if (button.classList.contains('reject-gmail-btn')) {
+                const { subid, uid } = button.dataset;
+                handleRejectGmailSubmission(subid, uid);
+            }
+        }
+        
+        async function handleApproveGmailSubmission(subId, userId, price) {
+            showLoader();
+            try {
+                // Update submission status
+                await db.ref(`users/${userId}/gmailSubmissions/${subId}/status`).set('approved');
+                
+                // Add balance to user
+                await db.ref(`users/${userId}/balance`).transaction(bal => (bal || 0) + price);
+                
+                // Increment today's count
+                const todayCount = (adminSettings.gmailSettings?.todayCount || 0) + 1;
+                await db.ref('admin/gmailSettings/todayCount').set(todayCount);
+                
+                // Create transaction record
+                const transactionData = {
+                    type: 'Gmail',
+                    amount: price,
+                    date: new Date().toISOString(),
+                    userId: userId,
+                    username: allUsers[userId]?.username,
+                    status: 'approved',
+                    details: `Gmail submission approved: ${price}৳`
+                };
+                
+                await db.ref('transactions').push(transactionData);
+                
+                alertUser("Gmail সাবমিশন অনুমোদিত হয়েছে।");
+                await loadAllData();
+            } catch (error) {
+                alertUser("Gmail অনুমোদনে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleRejectGmailSubmission(subId, userId) {
+            showLoader();
+            try {
+                await db.ref(`users/${userId}/gmailSubmissions/${subId}/status`).set('rejected');
+                alertUser("Gmail সাবমিশন বাতিল করা হয়েছে।");
+                await loadAllData();
+            } catch (error) {
+                alertUser("Gmail বাতিল করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        async function handleAddTask(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('task-name').value.trim();
+            const reward = parseFloat(document.getElementById('task-reward').value);
+            const link = document.getElementById('task-link').value.trim();
+            const planId = document.getElementById('task-plan').value;
+            const dailyLimit = document.getElementById('task-daily-limit').value;
+            const cooldown = document.getElementById('task-cooldown').value;
+            const isActive = document.getElementById('task-active').checked;
+            
+            if(!name || isNaN(reward) || !link) {
+                alertUser("দয়া করে সকল তথ্য সঠিকভাবে পূরণ করুন।", true);
+                return;
+            }
+            
+            showLoader();
+            try {
+                const taskData = {
+                    name,
+                    reward,
+                    link,
+                    active: isActive
+                };
+                
+                if (dailyLimit) taskData.dailyLimit = parseInt(dailyLimit);
+                if (cooldown) taskData.cooldown = parseInt(cooldown);
+                
+                await db.ref(`tasks/${planId}`).push(taskData);
+                alertUser("টাস্ক সফলভাবে যোগ করা হয়েছে।");
+                e.target.reset();
+                await loadAllData();
+            } catch(error) {
+                alertUser("টাস্ক যোগ করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function handleAddPlan(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('plan-name').value.trim();
+            const price = parseFloat(document.getElementById('plan-price').value);
+            const durationDays = parseInt(document.getElementById('plan-duration').value);
+            const description = document.getElementById('plan-description').value.trim();
+            
+            if(!name || isNaN(price) || isNaN(durationDays) || durationDays <= 0) {
+                alertUser("দয়া করে সকল তথ্য সঠিকভাবে পূরণ করুন।", true);
+                return;
+            }
+            
+            showLoader();
+            try {
+                const newPlanRef = db.ref('plans').push();
+                await newPlanRef.set({ name, price, durationDays, description });
+                alertUser("প্ল্যান সফলভাবে যোগ করা হয়েছে।");
+                e.target.reset();
+                await loadAllData();
+            } catch(error) {
+                alertUser("প্ল্যান যোগ করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function handleDeleteTask(e) {
+             const button = e.target.closest('.delete-task-btn');
+             if (!button) return;
+             
+             if (!confirm("আপনি কি এই টাস্কটি মুছে ফেলতে চান?")) return;
+             
+             showLoader();
+             try {
+                 const { planid, taskid } = button.dataset;
+                 await db.ref(`tasks/${planid}/${taskid}`).remove();
+                 alertUser("টাস্ক মুছে ফেলা হয়েছে।");
+                 await loadAllData();
+             } catch(error) {
+                 alertUser("টাস্ক মুছতে সমস্যা হয়েছে।", true);
+             } finally {
+                 hideLoader();
+             }
+        }
+
+        async function handleDeletePlan(e) {
+             const button = e.target.closest('.delete-plan-btn');
+             if (!button) return;
+             
+             if (!confirm("আপনি কি এই প্ল্যানটি মুছে ফেলতে চান? এটি সম্পর্কিত টাস্কগুলোও মুছে ফেলা হবে।")) return;
+             
+             showLoader();
+             try {
+                 const { planid } = button.dataset;
+                 const updates = {};
+                 updates[`/plans/${planid}`] = null;
+                 updates[`/tasks/${planid}`] = null; 
+                 
+                 await db.ref().update(updates);
+                 alertUser("প্ল্যান এবং সম্পর্কিত টাস্ক সফলভাবে মুছে ফেলা হয়েছে।");
+                 await loadAllData();
+             } catch(error) {
+                 alertUser("প্ল্যান মুছতে মারাত্মক সমস্যা হয়েছে।", true);
+                 console.error("Plan Deletion Error:", error);
+             } finally {
+                 hideLoader();
+             }
+        }
+        
+        async function handleSaveReferralSettings(e) {
+            e.preventDefault();
+            showLoader();
+            
+            try {
+                // Collect challenge data
+                const challenges = [];
+                const challengeInputs = document.querySelectorAll('#challenges-list input');
+                
+                for (let i = 0; i < challengeInputs.length; i += 2) {
+                    const targetInput = challengeInputs[i];
+                    const rewardInput = challengeInputs[i + 1];
+                    
+                    if (targetInput && rewardInput) {
+                        const target = parseInt(targetInput.value) || 0;
+                        const reward = parseInt(rewardInput.value) || 0;
+                        
+                        if (target > 0 && reward > 0) {
+                            challenges.push({ target, reward });
+                        }
+                    }
+                }
+                
+                const settings = {
+                    referralBonus: parseFloat(document.getElementById('referral-bonus').value) || 0,
+                    referralChallenges: challenges
+                };
+                
+                await db.ref('admin').update(settings);
+                alertUser("রেফারেল সেটিংস সফলভাবে সেভ হয়েছে।");
+                adminSettings = { ...adminSettings, ...settings };
+                renderReferralChallenges();
+            } catch (error) {
+                alertUser("রেফারেল সেটিংস সেভ করতে সমস্যা হয়েছে।", true);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        function addReferralChallenge() {
+            const challengesList = document.getElementById('challenges-list');
+            const currentChallenges = adminSettings.referralChallenges || [];
+            const newIndex = currentChallenges.length;
+            
+            challengesList.innerHTML += `
+                <div class="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                    <div class="flex-1">
+                        <input type="number" data-index="${newIndex}" data-field="target" 
+                               value="0" 
+                               class="w-full border p-1 rounded text-sm" placeholder="টার্গেট">
+                    </div>
+                    <div class="flex-1">
+                        <input type="number" data-index="${newIndex}" data-field="reward" 
+                               value="0" 
+                               class="w-full border p-1 rounded text-sm" placeholder="রিওয়ার্ড">
+                    </div>
+                    <button type="button" class="remove-challenge-btn text-red-500" data-index="${newIndex}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        }
+        
+        function removeReferralChallenge(index) {
+            if (!confirm("আপনি কি এই চ্যালেঞ্জটি মুছতে চান?")) return;
+            
+            const challenges = adminSettings.referralChallenges || [];
+            if (index >= 0 && index < challenges.length) {
+                challenges.splice(index, 1);
+                renderReferralChallenges();
+            }
+        }
+        
+        // Initialize the app when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if already logged in (for development)
+            const savedPassword = localStorage.getItem('admin_logged_in');
+            if (savedPassword === 'true') {
+                loginScreen.style.display = 'none';
+                adminPanel.style.display = 'block';
+                initializeApp();
+            }
+        });
+    </script>
+</body>
+</html>
