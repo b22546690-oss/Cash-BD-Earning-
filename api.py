@@ -219,7 +219,7 @@ def withdraw():
     if user.get('balance', 0) < amount:
         return jsonify({"success": False, "message": "Low Balance"})
         
-    if amount < settings.get('minWithdrawAmount', 100):
+    if amount < settings.get('minWithdrawAmount', 50):
         return jsonify({"success": False, "message": "Amount too low"})
         
     trx = {
