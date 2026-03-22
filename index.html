@@ -1,1584 +1,326 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EarningApp - Make Money Online</title>
-    
-    <meta name="description" content="Best platform to earn money online by completing tasks, selling emails, and referring friends. Withdraw via Bkash and Nagad.">
-    <meta name="keywords" content="earning app, make money online, bkash income, nagad income, bd earning site, gmail sell">
-    <meta name="author" content="EarningApp">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://earningapp.vercel.app/">
-    <meta property="og:title" content="EarningApp - Best Income Source">
-    <meta property="og:description" content="Start earning today with trusted payments.">
-    <meta property="og:image" content="https://iili.io/fWs359j.jpg">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://earningapp.vercel.app/">
-    <meta property="twitter:title" content="EarningApp">
-    <meta property="twitter:description" content="Start earning today with trusted payments.">
-    <meta property="twitter:image" content="https://iili.io/fWs359j.jpg">
-
-    <link rel="icon" type="image/jpeg" href="https://iili.io/fWs359j.jpg">
-    <link rel="apple-touch-icon" href="https://iili.io/fWs359j.jpg">
-    <link rel="manifest" href="/manifest.json">
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Coming Soon | SSC Special</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Marked for Chat Markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- DOMPurify for Chat Security (Added This to Fix Display Issue) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap');
-
-        :root { --primary: #6366f1; --secondary: #4f46e5; }
-        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-
-        .sidebar-gradient { background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%); }
-        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-radius: 16px; }
-        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; transition: all 0.2s; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-disabled { background: #cbd5e1; color: #64748b; cursor: not-allowed; }
-        .btn-blocked { background: #1f2937 !important; color: #6b7280 !important; cursor: not-allowed; opacity: 0.8; }
-        
-        .input-pro { 
-            background-color: #f9fafb; 
-            border: 1px solid #e5e7eb; 
-            transition: all 0.3s ease;
-        }
-        .input-pro:focus {
-            background-color: #ffffff;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-            outline: none;
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #00cec9;
+            --dark-color: #2d3436;
+            --glass: rgba(255, 255, 255, 0.85);
         }
 
-        .nav-item { display: flex; align-items: center; padding: 14px 20px; margin-bottom: 8px; border-radius: 12px; color: #a5b4fc; transition: 0.3s; font-weight: 500; }
-        .nav-item.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid #818cf8; }
-        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
-        
-        #bottom-nav { height: 75px; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: space-between; align-items: center; padding-left: 1rem; padding-right: 1rem; }
-        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; transition: 0.3s; }
-        .bottom-nav-item.active { color: #4f46e5; transform: translateY(-2px); }
-        .home-btn { width: 56px; height: 56px; background: #4f46e5; border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; transform: translateY(-25px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4); border: 4px solid #f3f4f6; }
-        .home-btn.active { color: white; background: #4338ca; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        .dash-card { position: relative; overflow: hidden; height: 120px; border-radius: 16px; transition: transform 0.2s; display: flex; flex-direction: column; justify-content: center; padding-left: 16px; }
-        .dash-card:hover { transform: translateY(-3px); }
-        .card-icon-bg { position: absolute; right: -10px; bottom: -10px; font-size: 5rem; opacity: 0.1; transform: rotate(-15deg); }
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: #0f172a;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-        /* Z-Index Fix for Popups: Increased to 3000 to be above chat */
-        .modal-overlay { 
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); 
-            z-index: 3000; display: none; justify-content: center; align-items: center; 
-            opacity: 0; transition: opacity 0.3s; 
+        /* Animated Background Particles */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
         }
-        .modal-overlay.open { display: flex; opacity: 1; }
-        .modal-box { background: white; width: 90%; max-width: 420px; border-radius: 24px; padding: 24px; transform: scale(0.95); transition: transform 0.3s; max-height: 90vh; overflow-y: auto; position: relative; }
-        .modal-overlay.open .modal-box { transform: scale(1); }
-        
-        .step-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-        .step-dot { width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0; transition: 0.3s; }
-        .step-dot.active { background: #4f46e5; width: 20px; border-radius: 4px; }
 
-        .hidden { display: none !important; }
-        .spinner { width: 20px; height: 20px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .truncate-ref { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; display: block; width: 100%; }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 10s infinite alternate;
+        }
 
-        .payment-radio:checked + div { border-color: #4f46e5; background-color: #eef2ff; }
-        .payment-radio:checked + div .check-icon { display: block; }
-        .scrollable-content { max-height: 300px; overflow-y: auto; border: 1px solid #f3f4f6; border-radius: 8px; padding: 10px; background: #fafafa; }
-        
-        .app-icon-img { width: 100%; height: 100%; object-fit: cover; }
-        .method-icon { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb; }
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 100px); }
+        }
 
-        /* Support System & Chat Styles */
-        .fab-container {
-            position: fixed; bottom: 100px; right: 20px; z-index: 1001;
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        .wrapper {
+            width: 90%;
+            max-width: 850px;
+            padding: 50px 40px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1;
+            position: relative;
         }
-        .fab-btn {
-            width: 55px; height: 55px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; overflow: hidden;
-        }
-        .fab-main {
-            background: #ffffff; color: #4f46e5; font-size: 28px;
-            animation: pulse-glow 2s infinite; border: 2px solid #eef2ff;
-        }
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
-        }
-        .fab-sub {
-            width: 50px; height: 50px; background: white; border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; transform: translateY(20px) scale(0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-        }
-        .fab-sub img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        
-        .fab-active .fab-main { transform: rotate(720deg); background: #ef4444; color: white; animation: none; border-color: #fca5a5; }
-        .fab-active .fab-sub { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
-        /* Chat Sheet Styles */
-        .bottom-sheet {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            height: 70vh; /* Changed to 70% as requested */
-            background: #ffffff;
-            border-top-left-radius: 20px; border-top-right-radius: 20px;
-            box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
-            z-index: 2000;
-            transform: translateY(110%); 
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex; flex-direction: column;
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            text-transform: uppercase;
         }
-        .bottom-sheet.active { transform: translateY(0); }
-        
-        /* Expanded: Full Screen Fixed - Anchored to Top */
-        .bottom-sheet.expanded { 
-            height: 100% !important; 
-            max-height: 100% !important; 
-            border-radius: 0; 
-            top: 0; 
-        }
-        
-        .sheet-header {
-            padding: 15px 20px; border-bottom: 1px solid #f1f5f9;
-            display: grid; grid-template-columns: 40px 1fr 40px;
-            align-items: center; flex-shrink: 0;
-        }
-        .sheet-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem; text-align: center; color: #1e293b; }
-        .sheet-btn {
-            background: none; border: none; cursor: pointer; color: #64748b;
-            padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            transition: 0.2s;
-        }
-        .sheet-btn:hover { background: #f8fafc; color: #0f172a; }
 
-        /* Content Container - Flex 1 ensures it fills available space pushing footer down */
-        .chat-container {
-            flex: 1; overflow-y: auto; padding: 20px;
-            display: flex; flex-direction: column; gap: 15px;
-            background: #f8fafc; scroll-behavior: smooth;
-        }
-        .chat-bubble {
-            max-width: 80%; padding: 12px 16px; border-radius: 16px;
-            font-size: 0.95rem; line-height: 1.5; position: relative;
-            word-wrap: break-word; animation: fadeIn 0.2s ease;
-        }
-        .chat-bubble.user {
-            align-self: flex-end; background: #4f46e5; color: white;
-            border-bottom-right-radius: 2px;
-        }
-        .chat-bubble.ai {
-            align-self: flex-start; background: white; color: #0f172a;
-            border: 1px solid #e2e8f0;
-            border-bottom-left-radius: 2px; display: flex; gap: 10px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        /* Markdown Styles fix for Chat */
-        .chat-bubble.ai p { margin-bottom: 8px; }
-        .chat-bubble.ai p:last-child { margin-bottom: 0; }
-        .chat-bubble.ai strong { font-weight: 700; }
-        .chat-bubble.ai em { font-style: italic; }
-        .chat-bubble.ai h1, .chat-bubble.ai h2, .chat-bubble.ai h3 { font-weight: 700; font-size: 1.1em; margin-bottom: 5px; }
-        
-        .ai-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; object-fit: cover; }
-        .ai-content { flex: 1; overflow-x: hidden; }
+        .badge i { animation: pulse 2s infinite; }
 
-        /* Footer - Fixed at bottom of flex container */
-        .chat-footer {
-            padding: 10px 15px; background: white; border-top: 1px solid #f1f5f9;
-            display: flex; align-items: flex-end; gap: 10px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            flex-shrink: 0; /* Prevents shrinking */
+        h1 {
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            font-weight: 800;
+            background: linear-gradient(to right, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
         }
-        .chat-input {
-            flex: 1; background: #f8fafc; border: 1px solid #e2e8f0;
-            border-radius: 20px; padding: 12px 15px; max-height: 100px;
-            overflow-y: auto; color: #0f172a; font-family: inherit; font-size: 0.95rem;
-            resize: none; outline: none; transition: border-color 0.2s;
-        }
-        .chat-input:focus { border-color: #4f46e5; background: white; }
-        .chat-send-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: #4f46e5;
-            color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: 0.2s; flex-shrink: 0;
-        }
-        .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .chat-send-btn:not(:disabled):hover { transform: scale(1.05); }
 
-        .typing-container { display: flex; align-items: center; gap: 10px; margin-top: 5px; align-self: flex-start; }
-        .typing-dots { display: flex; gap: 4px; align-items: center; height: 30px; background: white; padding: 0 10px; border-radius: 15px; border: 1px solid #e2e8f0; }
-        .dot { width: 6px; height: 6px; background: #64748b; border-radius: 50%; animation: wave 1.3s linear infinite; }
-        .dot:nth-child(2) { animation-delay: -1.1s; }
-        .dot:nth-child(3) { animation-delay: -0.9s; }
-        @keyframes wave { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
-        @keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
-
-        .sheet-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1999;
-            opacity: 0; visibility: hidden; transition: 0.3s;
+        .description {
+            font-size: 1.15rem;
+            color: #4b5563;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
         }
-        .sheet-overlay.active { opacity: 1; visibility: visible; }
-        
-        @media (min-width: 768px) {
-            .fab-container { right: 40px; bottom: 40px; }
-            .bottom-sheet { width: 400px; right: 20px; left: auto; border-radius: 20px; }
-            .bottom-sheet.expanded { width: 500px; height: 80vh !important; border-radius: 20px; top: auto; }
+
+        /* Countdown Boxes */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .time-box {
+            background: white;
+            min-width: 120px;
+            padding: 20px 10px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(108, 92, 231, 0.1);
+        }
+
+        .time-box:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.2);
+        }
+
+        .num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-color);
+            display: block;
+        }
+
+        .label {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+        .progress-bar-bg {
+            height: 10px;
+            background: #dfe6e9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transition: width 1s ease;
+        }
+
+        /* Notice Section */
+        .ssc-notice {
+            background: #fff3f3;
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px dashed #fab1a0;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .notice-icon {
+            font-size: 2.5rem;
+            color: #d63031;
+        }
+
+        /* Contact & Social */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .social-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .wrapper { padding: 40px 20px; }
+            .time-box { min-width: 80px; padding: 15px 5px; }
+            .num { font-size: 1.8rem; }
+            .ssc-notice { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="background">
+        <div class="circle" style="width: 400px; height: 400px; top: -100px; left: -100px;"></div>
+        <div class="circle" style="width: 300px; height: 300px; bottom: -50px; right: -50px; background: var(--secondary-color);"></div>
+    </div>
+
+    <div class="wrapper">
+        <div class="badge">
+            <i class="fas fa-rocket"></i> Launching Soon
+        </div>
         
-        <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 sidebar-gradient transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-40 flex flex-col shadow-2xl">
-            <div class="h-24 flex items-center px-8 border-b border-indigo-800/50">
-                <div class="w-10 h-10 rounded-xl overflow-hidden mr-3 border-2 border-white/20">
-                    <img src="https://iili.io/fWs359j.jpg" class="app-icon-img">
-                </div>
-                <h1 id="sidebar-title" class="text-white font-bold text-xl tracking-wide">EarningApp</h1>
+        <h1>অপেক্ষা ফুরাবে খুব শীঘ্রই!</h1>
+        <p class="description">আমরা আমাদের সাইটটি আরও স্মার্ট এবং শক্তিশালী করে তুলছি। নতুন সব চমক নিয়ে আসছি আপনার জন্য।</p>
+
+        <div class="countdown-container">
+            <div class="time-box">
+                <span class="num" id="days">00</span>
+                <span class="label">দিন</span>
             </div>
-
-            <div class="p-6">
-                <div class="flex items-center space-x-4 bg-white/5 p-4 rounded-2xl border border-white/10 cursor-pointer hover:bg-white/10 transition" onclick="app.nav('profile')">
-                    <img id="sidebar-avatar" src="https://iili.io/fWs359j.jpg" class="w-12 h-12 rounded-full border-2 border-indigo-400 object-cover">
-                    <div class="overflow-hidden">
-                        <p id="sidebar-name" class="text-white font-semibold truncate">Guest</p>
-                        <p id="sidebar-status" class="text-xs text-gray-400">Not Logged In</p>
-                    </div>
-                </div>
+            <div class="time-box">
+                <span class="num" id="hours">00</span>
+                <span class="label">ঘণ্টা</span>
             </div>
-
-            <nav class="flex-1 px-4 overflow-y-auto space-y-2 mt-2">
-                <a href="#" class="nav-item active" onclick="app.nav('dashboard')" data-page="dashboard"><i class="fas fa-home w-8"></i> <span data-i18n="dashboard">Dashboard</span></a>
-                <a href="#" class="nav-item" onclick="app.nav('my_job')" data-page="my_job"><i class="fas fa-briefcase w-8"></i> <span data-i18n="task">Task</span></a>
-                <a href="#" class="nav-item" onclick="app.nav('premium_plan')" data-page="premium_plan"><i class="fas fa-crown w-8"></i> <span data-i18n="plan">Plan</span></a>
-                <a href="#" class="nav-item" onclick="app.nav('payment')" data-page="payment"><i class="fas fa-wallet w-8"></i> <span data-i18n="withdraw">Withdraw</span></a>
-                <a href="#" class="nav-item" onclick="app.nav('history')" data-page="history"><i class="fas fa-history w-8"></i> <span data-i18n="history">History</span></a>
-                <a href="#" class="nav-item" onclick="app.nav('profile')" data-page="profile"><i class="fas fa-user-circle w-8"></i> <span data-i18n="profile">Profile</span></a>
-                
-                <div class="mt-8 border-t border-indigo-800/50 pt-4">
-                    <a href="#" id="auth-btn" class="nav-item text-red-300" onclick="window.handleLogoutClick()"><i class="fas fa-sign-in-alt w-8"></i> <span data-i18n="login">Login</span></a>
-                </div>
-            </nav>
-        </aside>
-
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden transition-opacity" onclick="ui.toggleSidebar()"></div>
-
-        <div class="flex-1 flex flex-col md:ml-72 h-full relative bg-[#f3f4f6]">
-            <header class="h-16 bg-white flex items-center justify-between px-5 md:hidden z-20 shadow-sm sticky top-0">
-                <button onclick="ui.toggleSidebar()" class="text-gray-600 text-xl"><i class="fas fa-bars"></i></button>
-                <h2 id="header-title" class="font-bold text-gray-800 text-lg">Dashboard</h2>
-                <div class="w-9 h-9 rounded-full overflow-hidden border border-gray-200" onclick="app.nav('profile')">
-                    <img id="header-avatar" src="https://iili.io/fWs359j.jpg" class="w-full h-full object-cover">
-                </div>
-            </header>
-
-            <main id="content-area" class="flex-1 overflow-y-auto p-5 pb-24 md:p-8 md:pb-8">
-            </main>
-        </div>
-
-        <nav id="bottom-nav" class="fixed bottom-0 w-full bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:hidden z-30">
-            <button class="bottom-nav-item" onclick="app.nav('my_job')" data-page="my_job"><i class="fas fa-briefcase text-xl mb-1"></i><span class="text-[10px]" data-i18n="task">Task</span></button>
-            <button class="bottom-nav-item" onclick="app.nav('premium_plan')" data-page="premium_plan"><i class="fas fa-crown text-xl mb-1"></i><span class="text-[10px]" data-i18n="plan">Plan</span></button>
-            <button class="home-btn" onclick="app.nav('dashboard')" data-page="dashboard"><i class="fas fa-home text-2xl"></i></button>
-            <button class="bottom-nav-item" onclick="app.nav('payment')" data-page="payment"><i class="fas fa-wallet text-xl mb-1"></i><span class="text-[10px]" data-i18n="withdraw">Withdraw</span></button>
-            <button class="bottom-nav-item" onclick="app.nav('profile')" data-page="profile"><i class="fas fa-user text-xl mb-1"></i><span class="text-[10px]" data-i18n="profile">Profile</span></button>
-        </nav>
-    </div>
-
-    <!-- SUPPORT SYSTEM FAB -->
-    <div class="fab-container">
-        <!-- WhatsApp Added Here -->
-        <a href="https://wa.me/+8801721656930" target="_blank" class="fab-sub">
-            <i class="fab fa-whatsapp text-3xl text-green-500"></i>
-        </a>
-        <a href="https://t.me/CashBD_Earn" target="_blank" class="fab-sub" id="fabTelegram">
-            <i class="fab fa-telegram-plane text-2xl text-blue-500"></i>
-        </a>
-        <div class="fab-btn fab-main" id="supportFab" onclick="toggleFab()">
-            <i class="fas fa-headset icon-main"></i>
-        </div>
-    </div>
-
-    <!-- CHAT SHEET -->
-    <div class="sheet-overlay" id="sheetOverlay" onclick="chatHandler.close()"></div>
-    <div class="bottom-sheet" id="chatSheet">
-        <div class="sheet-header">
-            <button class="sheet-btn" id="chatExpandBtn" onclick="chatHandler.toggleExpand()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-            </button>
-            <span class="sheet-title">Support</span>
-            <button class="sheet-btn" onclick="chatHandler.close()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-        <div class="chat-container" id="chatList"></div>
-        <div class="chat-footer">
-            <textarea id="chatInput" class="chat-input" placeholder="Type a message..." rows="1"></textarea>
-            <button id="chatSendBtn" class="chat-send-btn" onclick="chatHandler.send()">
-                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:white;margin-left:-2px"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
-            </button>
-        </div>
-    </div>
-
-    <div id="auth-modal" class="modal-overlay">
-        <div class="modal-box relative">
-            <button onclick="ui.closeModal('auth-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="fas fa-times"></i></button>
-            
-            <div class="text-center mb-6">
-                <img src="https://iili.io/fWs359j.jpg" class="w-20 h-20 rounded-full mx-auto shadow-lg border-4 border-indigo-50 mb-4 object-cover">
-                <h2 id="auth-title" class="text-2xl font-bold text-gray-800" data-i18n="login_title">Login</h2>
-                <div class="flex justify-center space-x-3 mt-2 text-sm text-gray-500">
-                    <span onclick="window.appLang.set('en')" class="cursor-pointer hover:text-indigo-600 font-medium">English</span>
-                    <span>|</span>
-                    <span onclick="window.appLang.set('bn')" class="cursor-pointer hover:text-indigo-600 font-medium">বাংলা</span>
-                </div>
+            <div class="time-box">
+                <span class="num" id="minutes">00</span>
+                <span class="label">মিনিট</span>
             </div>
-
-            <div id="auth-alert" class="hidden p-3 rounded-lg text-sm mb-4 text-center"></div>
-
-            <form id="login-form" class="space-y-4">
-                <div class="input-pro p-3 rounded-xl flex items-center">
-                    <i class="fas fa-user text-gray-400 mr-3 ml-1"></i>
-                    <input type="text" id="login-input" placeholder="Username or Email" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="login_ph" required>
-                </div>
-                <div class="input-pro p-3 rounded-xl flex items-center">
-                    <i class="fas fa-lock text-gray-400 mr-3 ml-1"></i>
-                    <input type="password" id="login-pass" placeholder="Password" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="pass_ph" required>
-                </div>
-                <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold shadow-lg flex justify-center items-center">
-                    <span class="btn-text" data-i18n="login">Login</span>
-                    <div class="spinner hidden ml-2"></div>
-                </button>
-            </form>
-
-            <form id="reg-form" class="hidden space-y-4">
-                <div class="step-dots">
-                    <div class="step-dot active" id="dot-1"></div>
-                    <div class="step-dot" id="dot-2"></div>
-                    <div class="step-dot" id="dot-3"></div>
-                </div>
-
-                <div id="step-1">
-                    <div class="space-y-4">
-                        <div class="input-pro p-3 rounded-xl flex items-center">
-                            <i class="fas fa-id-card text-gray-400 mr-3 ml-1"></i>
-                            <input type="text" id="reg-name" placeholder="Full Name" maxlength="25" minlength="3" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="full_name_ph">
-                        </div>
-                        <div class="input-pro p-3 rounded-xl flex items-center">
-                            <i class="fas fa-user-tag text-gray-400 mr-3 ml-1"></i>
-                            <input type="text" id="reg-username" placeholder="Username (Unique)" maxlength="20" minlength="5" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="username_ph">
-                        </div>
-                        <button type="button" onclick="authHandler.nextStep(2)" class="btn-primary w-full py-3.5 rounded-xl font-bold" data-i18n="next">Next</button>
-                    </div>
-                </div>
-
-                <div id="step-2" class="hidden">
-                    <div class="space-y-4">
-                        <div class="input-pro p-3 rounded-xl flex items-center">
-                            <i class="fas fa-envelope text-gray-400 mr-3 ml-1"></i>
-                            <input type="email" id="reg-email" placeholder="Email Address" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="email_ph">
-                        </div>
-                        <div class="input-pro p-3 rounded-xl flex items-center">
-                            <i class="fas fa-gift text-gray-400 mr-3 ml-1"></i>
-                            <input type="text" id="reg-ref" placeholder="Referral Code (Optional)" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="ref_ph">
-                        </div>
-                        <div class="flex space-x-2">
-                            <button type="button" onclick="authHandler.nextStep(1)" class="w-1/3 py-3.5 bg-gray-200 text-gray-700 rounded-xl font-bold" data-i18n="back">Back</button>
-                            <button type="button" onclick="authHandler.nextStep(3)" class="w-2/3 btn-primary py-3.5 rounded-xl font-bold" data-i18n="next">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="step-3" class="hidden">
-                    <div class="space-y-4">
-                        <div class="input-pro p-3 rounded-xl flex items-center">
-                            <i class="fas fa-lock text-gray-400 mr-3 ml-1"></i>
-                            <input type="password" id="reg-pass" placeholder="Password (Min 6 chars)" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="pass_ph">
-                        </div>
-                        <div class="input-pro p-3 rounded-xl flex items-center">
-                            <i class="fas fa-check-circle text-gray-400 mr-3 ml-1"></i>
-                            <input type="password" id="reg-confirm" placeholder="Confirm Password" class="bg-transparent w-full focus:outline-none text-gray-700 text-sm" data-i18n-placeholder="confirm_ph">
-                        </div>
-                        <div class="flex space-x-2">
-                            <button type="button" onclick="authHandler.nextStep(2)" class="w-1/3 py-3.5 bg-gray-200 text-gray-700 rounded-xl font-bold" data-i18n="back">Back</button>
-                            <button type="submit" class="w-2/3 btn-primary py-3.5 rounded-xl font-bold flex justify-center items-center">
-                                <span class="btn-text" data-i18n="create_acc_btn">Create Account</span>
-                                <div class="spinner hidden ml-2"></div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <div class="mt-6 text-center text-sm">
-                <p id="switch-txt" class="text-gray-500">
-                    <span data-i18n="no_account">Don't have an account?</span> 
-                    <button onclick="authHandler.toggleMode()" class="text-indigo-600 font-bold hover:underline" data-i18n="register_link">Register</button>
-                </p>
+            <div class="time-box">
+                <span class="num" id="seconds">00</span>
+                <span class="label">সেকেন্ড</span>
             </div>
         </div>
-    </div>
 
-    <div id="gen-modal" class="modal-overlay">
-        <div class="modal-box relative">
-            <button onclick="ui.closeModal('gen-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="fas fa-times"></i></button>
-            <div id="gen-modal-content"></div>
-        </div>
-    </div>
-
-    <div id="gmail-rules-modal" class="modal-overlay">
-        <div class="modal-box relative">
-            <button onclick="ui.closeGmailRules()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="fas fa-times"></i></button>
-            <div class="text-center mb-4">
-                <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
-                    <i class="fas fa-book-open"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800" data-i18n="gmail_rule_title">Rules & Regulations</h3>
-            </div>
-            <div class="scrollable-content mb-6 text-sm text-gray-600 text-left">
-                <p data-i18n="gmail_rule_desc"></p>
-            </div>
-            <button onclick="ui.closeGmailRules(true)" class="btn-primary w-full py-3 rounded-xl font-bold" data-i18n="i_understand">I Understand</button>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="modal-overlay">
-        <div class="modal-box relative">
-            <button onclick="ui.closeModal('profile-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="fas fa-times"></i></button>
-            <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-gray-800" data-i18n="edit_profile">Edit Profile</h3>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase" data-i18n="full_name_ph">Full Name</label>
-                    <input type="text" id="modal-edit-fullname" maxlength="25" minlength="3" class="w-full p-3 input-pro rounded-xl" placeholder="Full Name">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase" data-i18n="username_ph">Username</label>
-                    <input type="text" id="modal-edit-username" maxlength="20" minlength="5" class="w-full p-3 input-pro rounded-xl" placeholder="Username">
-                </div>
-                <div class="flex gap-3 mt-6">
-                    <button onclick="ui.closeModal('profile-modal')" class="flex-1 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold" data-i18n="cancel">Cancel</button>
-                    <button onclick="window.saveProfileModal()" class="flex-1 py-3 btn-primary rounded-xl font-bold" data-i18n="save">Save</button>
-                </div>
+        <div class="progress-wrapper">
+            <p style="font-size: 0.8rem; margin-bottom: 8px; font-weight: 600; color: #636e72;">প্রস্তুতি সম্পন্ন হচ্ছে...</p>
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="pbar"></div>
             </div>
         </div>
+
+        <div class="ssc-notice">
+            <div class="notice-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div>
+                <strong>এসএসসি (SSC) পরীক্ষা আপডেট:</strong><br>
+                সাইট অ্যাডমিনের বোর্ড পরীক্ষা চলমান থাকায় কাজ কিছুটা ধীরগতিতে হচ্ছে। দোয়া করবেন যেন দ্রুত আপনাদের মাঝে ফিরতে পারি!
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <a href="mailto:b22546690@gmail.com" class="social-btn" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #9ca3af;">Contact: b22546690@gmail.com</p>
     </div>
 
     <script>
-        const dict = {
-            en: { 
-                dashboard: "Dashboard", task: "Task", plan: "Plan", withdraw: "Withdraw", history: "History", profile: "Profile", 
-                login: "Login", logout: "Logout", welcome: "Welcome", activate: "Activate Account", verified: "Verified", inactive: "Inactive", 
-                balance: "Balance", income: "Total Income", ref: "Referrals", share: "Share & Earn", guest: "Guest", 
-                no_access: "Login Required", no_access_desc: "Please login to access this feature.", 
-                act_desc: "Activate to unlock Withdraw & Plans", act_msg: "Account Inactive", 
-                edit: "Edit", save: "Save", cancel: "Cancel", trx_id: "Transaction ID", submit: "Submit",
-                logout_confirm: "Are you sure you want to logout?", edit_profile: "Edit Profile",
-                create_acc: "Create Account", already_purchased: "Already Purchased", buy_now: "Buy Now",
-                loading_rec: "Loading records...", no_rec: "No Records Found", no_withdraw: "No Withdrawals Found",
-                allow_popup: "Allow Popups", task_complete: "Task Complete!", insuff_bal: "Insufficient Balance",
-                login_title: "Login", register_title: "Create Account", login_ph: "Username or Email", pass_ph: "Password",
-                full_name_ph: "Full Name", username_ph: "Username", email_ph: "Email Address", ref_ph: "Referral Code (Optional)", confirm_ph: "Confirm Password",
-                next: "Next", back: "Back", create_acc_btn: "Create Account", no_account: "Don't have an account?", have_account: "Already have an account?",
-                register_link: "Register", login_link: "Login",
-                select_method: "Select Method", send_money: "Send Money To", method_bkash: "Bkash", method_nagad: "Nagad",
-                daily_claim: "Daily Claim", claim_now: "Claim", claimed: "Claimed", no_plan: "No Active Plan",
-                pending: "Pending", approved: "Approved", rejected: "Rejected",
-                gmail_sell: "Gmail Sell", ref_challenge: "Referral Challenge", active_ref: "Active Refs", 
-                hold: "Hold", submit_email: "Submit Gmail", today_limit_reached: "Daily limit reached!",
-                avg_rate: "Avg Rate", total_sold: "Total Sold", copy_pass: "Copy Pass",
-                already_done: "Task already completed!", one_task_limit: "You can only do 1 task per day!",
-                target: "Target", reward: "Reward",
-                gmail_msg: "Message: When creating Gmail, you must use this password we provided. Password: {pass}",
-                gmail_rule_title: "Rules & Regulations",
-                gmail_rule_desc: "You can earn by creating Gmails here.<br><br><b>Rules:</b><br>1. You can use any name for the Gmail.<br>2. <b>Important:</b> You MUST use the password we provide below. If you submit a Gmail with a different password, it will be rejected.<br>3. Do NOT use any numbers in the Gmail username (e.g. use 'john.doe@gmail.com' not 'john123@gmail.com'). Only English letters.<br><br>Please follow these instructions carefully to get paid.",
-                i_understand: "I Understand",
-                recent_sub: "Recent Submissions",
-                submit_new_gmail: "Submit New Gmail",
-                language: "Language",
-                no_plan_found: "No Plan Found",
-                withdraw_header: "Withdraw via {method}",
-                label_num: "Number",
-                label_amt: "Amount",
-                ph_num: "Enter Account Number",
-                ph_amt: "Enter Amount",
-                pay_step2_header: "Send Money To",
-                trx_ph: "Transaction ID",
-                pending_act: "Activation Pending",
-                ref_reward_txt: "Per Referral: {amount}৳",
-                min_withdraw_txt: "Minimum Withdraw: {amount}৳",
-                copied: "Copied!"
-            },
-            bn: { 
-                dashboard: "ড্যাশবোর্ড", task: "টাস্ক", plan: "প্ল্যান", withdraw: "উত্তোলন", history: "হিস্ট্রি", profile: "প্রোফাইল", 
-                login: "লগইন", logout: "লগ আউট", welcome: "স্বাগতম", activate: "অ্যাকাউন্ট এক্টিভ করুন", verified: "ভেরিফাইড", inactive: "ইনএ্যাক্টিভ", 
-                balance: "ব্যালেন্স", income: "মোট আয়", ref: "রেফারেল", share: "শেয়ার করুন", guest: "অতিথি", 
-                no_access: "লগইন প্রয়োজন", no_access_desc: "এই ফিচারটি পেতে লগইন করুন।", 
-                act_desc: "টাকা তুলতে অ্যাকাউন্ট এক্টিভ করুন", act_msg: "অ্যাকাউন্ট ইনএ্যাক্টিভ", 
-                edit: "এডিট", save: "সেভ", cancel: "বাতিল", trx_id: "ট্রানজেকশন আইডি", submit: "জমা দিন",
-                logout_confirm: "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?", edit_profile: "প্রোফাইল এডিট",
-                create_acc: "অ্যাকাউন্ট তৈরি করুন", already_purchased: "কেনা হয়েছে", buy_now: "এখনই কিনুন",
-                loading_rec: "লোডিং...", no_rec: "কোনো তথ্য পাওয়া যায়নি", no_withdraw: "কোনো উত্তোলন পাওয়া যায়নি",
-                allow_popup: "পপ-আপ অনুমতি দিন", task_complete: "টাস্ক সম্পন্ন!", insuff_bal: "অপর্যাপ্ত ব্যালেন্স",
-                login_title: "লগইন", register_title: "অ্যাকাউন্ট খুলুন", login_ph: "ইউজারনেম অথবা ইমেইল", pass_ph: "পাসওয়ার্ড",
-                full_name_ph: "পুরো নাম", username_ph: "ইউজারনেম", email_ph: "ইমেইল অ্যাড্রেস", ref_ph: "রেফার কোড (অপশনাল)", confirm_ph: "পাসওয়ার্ড নিশ্চিত করুন",
-                next: "পরবর্তী", back: "ফিরে যান", create_acc_btn: "অ্যাকাউন্ট তৈরি করুন", no_account: "অ্যাকাউন্ট নেই?", have_account: "অ্যাকাউন্ট আছে?",
-                register_link: "রেজিস্ট্রেশন", login_link: "লগইন",
-                select_method: "মেথড সিলেক্ট করুন", send_money: "টাকা পাঠান", method_bkash: "বিকাশ", method_nagad: "নগদ",
-                daily_claim: "দৈনিক ক্লেইম", claim_now: "ক্লেইম", claimed: "নেওয়া হয়েছে", no_plan: "কোনো প্ল্যান নেই",
-                pending: "পেন্ডিং", approved: "অনুমোদিত", rejected: "বাতিল",
-                gmail_sell: "জিমেইল সেল", ref_challenge: "রেফার চ্যালেঞ্জ", active_ref: "এক্টিভ রেফার", 
-                hold: "হোল্ডিং", submit_email: "জিমেইল জমা দিন", today_limit_reached: "আজকের লিমিট শেষ!",
-                avg_rate: "গড় রেট", total_sold: "মোট বিক্রি", copy_pass: "পাসওয়ার্ড কপি",
-                already_done: "টাস্কটি ইতিমধ্যে করা হয়েছে!", one_task_limit: "প্রতিদিন মাত্র ১টি টাস্ক করতে পারবেন!",
-                target: "টার্গেট", reward: "পুরষ্কার",
-                gmail_msg: "বার্তা: জিমেইল খোলার সময় অবশ্যই আমাদের দেয়া এই পাসওয়ার্ড ব্যবহার করবেন, পাসওয়ার্ড: {pass}",
-                gmail_rule_title: "নিয়ম এবং নীতিমালা",
-                gmail_rule_desc: "আপনি আমাদের এখানে জিমেইল তৈরি করে প্রতিদিন আয় করতে পারবেন।<br><br><b>নিয়মাবলী:</b><br>১. জিমেইল এর নাম আপনার ইচ্ছামত দিতে পারবেন।<br>২. <b>সতর্কতা:</b> পাসওয়ার্ড যেটি দিবেন সেটি অবশ্যই আমাদের দেয়া এবং নিচে প্রদর্শিত পাসওয়ার্ড হতে হবে। অন্য পাসওয়ার্ড দিলে তা বাতিল হবে।<br>৩. জিমেইল ইউজারনেমে কোনো সংখ্যা (123) ব্যবহার করা যাবে না, শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করতে হবে।<br><br>সঠিকভাবে কাজ করতে নির্দেশনা মেনে চলুন।",
-                i_understand: "আমি বুঝেছি",
-                recent_sub: "সাম্প্রতিক জমা",
-                submit_new_gmail: "নতুন জিমেইল জমা দিন",
-                language: "ভাষা",
-                no_plan_found: "কোনো প্ল্যান পাওয়া যায়নি",
-                withdraw_header: "{method} এর মাধ্যমে উইথড্র করুন",
-                label_num: "নাম্বার",
-                label_amt: "পরিমাণ",
-                ph_num: "অ্যাকাউন্ট নাম্বার দিন",
-                ph_amt: "পরিমাণ লিখুন",
-                pay_step2_header: "টাকা পাঠান",
-                trx_ph: "ট্রানজেকশন আইডি",
-                pending_act: "অ্যাক্টিভেশন পেন্ডিং",
-                ref_reward_txt: "প্রতি রেফারে: {amount}৳",
-                min_withdraw_txt: "সর্বনিম্ন উত্তোলন: {amount}৳",
-                copied: "কপি হয়েছে!"
-            }
-        };
+        // আপনার টার্গেট ডেট (এই তারিখটি একবারই সেট করবেন)
+        const launchDate = new Date("May 10, 2026 00:00:00").getTime();
+        // এটি প্রগ্রেস বার ক্যালকুলেশনের জন্য শুরুর তারিখ (আজকের তারিখ হিসেবেও দিতে পারেন)
+        const startDate = new Date("March 1, 2026 00:00:00").getTime();
 
-        const state = {
-            userUid: localStorage.getItem('uid'),
-            isGuest: true,
-            data: {}, 
-            settings: {}, 
-            tasks: {},
-            plans: {},
-            currentLang: localStorage.getItem('lang') || 'en',
-            gmailSettings: {},
-            refChallenges: [],
-            pendingActivation: false,
-            pendingPlan: false
-        };
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const gap = launchDate - now;
 
-        window.appLang = {
-            t: (k) => (dict[state.currentLang] && dict[state.currentLang][k]) || k,
-            set: (l) => {
-                state.currentLang = l;
-                localStorage.setItem('lang', l);
-                ui.updateText();
-                app.nav(app.currentPage, true);
+            if (gap < 0) {
+                document.querySelector(".countdown-container").innerHTML = "<h2 style='color:#6c5ce7'>আমরা এখন লাইভ!</h2>";
+                document.getElementById('pbar').style.width = "100%";
+                return;
             }
-        };
 
-        // FAB Handler
-        let isFabOpen = false;
-        const toggleFab = () => {
-            isFabOpen = !isFabOpen;
-            const container = document.querySelector('.fab-container');
-            const mainIcon = document.querySelector('.icon-main');
-            if(isFabOpen) {
-                container.classList.add('fab-active');
-                mainIcon.classList.remove('fa-headset');
-                mainIcon.classList.add('fa-times');
-            } else {
-                container.classList.remove('fab-active');
-                mainIcon.classList.remove('fa-times');
-                mainIcon.classList.add('fa-headset');
-            }
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            const d = Math.floor(gap / day);
+            const h = Math.floor((gap % day) / hour);
+            const m = Math.floor((gap % hour) / minute);
+            const s = Math.floor((gap % minute) / second);
+
+            document.getElementById('days').innerText = d.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+
+            // প্রগ্রেস বার ক্যালকুলেশন
+            const totalDuration = launchDate - startDate;
+            const elapsed = now - startDate;
+            const progress = (elapsed / totalDuration) * 100;
+            document.getElementById('pbar').style.width = Math.min(Math.max(progress, 0), 100) + "%";
         }
 
-        
-        
-        const ui = {
-            toggleSidebar: () => {
-                const sb = document.getElementById('sidebar');
-                const ov = document.getElementById('sidebar-overlay');
-                const isClosed = sb.classList.contains('-translate-x-full');
-                sb.classList.toggle('-translate-x-full', !isClosed);
-                ov.classList.toggle('hidden', !isClosed);
-            },
-            openModal: (id) => document.getElementById(id).classList.add('open'),
-            closeModal: (id) => document.getElementById(id).classList.remove('open'),
-            openGmailRules: () => {
-                 const hasSeen = localStorage.getItem('seenGmailRules');
-                 if(!hasSeen) {
-                    const descEl = document.querySelector('#gmail-rules-modal [data-i18n="gmail_rule_desc"]');
-                    if(descEl) descEl.innerHTML = window.appLang.t('gmail_rule_desc');
-                    document.getElementById('gmail-rules-modal').classList.add('open');
-                 }
-            },
-            closeGmailRules: (permanently = false) => {
-                document.getElementById('gmail-rules-modal').classList.remove('open');
-                if(permanently) localStorage.setItem('seenGmailRules', 'true');
-            },
-            updateText: () => {
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.dataset.i18n;
-                    if(dict[state.currentLang][key]) {
-                        if(key === 'gmail_rule_desc') el.innerHTML = dict[state.currentLang][key];
-                        else el.textContent = dict[state.currentLang][key];
-                    }
-                });
-                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                    const key = el.dataset.i18nPlaceholder;
-                    if(dict[state.currentLang][key]) el.placeholder = dict[state.currentLang][key];
-                });
-            },
-            skeleton: (h = "h-24") => `<div class="skeleton w-full ${h} mb-4"></div>`,
-            showError: (elId, msg) => {
-                const el = document.getElementById(elId);
-                el.textContent = msg;
-                el.className = `p-3 rounded-lg text-sm mb-4 text-center block ${msg.includes('Success') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
-                el.classList.remove('hidden');
-                setTimeout(() => el.classList.add('hidden'), 4000);
-            }
-        };
-
-        const authHandler = {
-            mode: 'login',
-            regStep: 1,
-
-            trigger: () => {
-                ui.openModal('auth-modal');
-                authHandler.resetForm();
-            },
-
-            toggleMode: () => {
-                authHandler.mode = authHandler.mode === 'login' ? 'register' : 'login';
-                const isLogin = authHandler.mode === 'login';
-                document.getElementById('auth-title').setAttribute('data-i18n', isLogin ? 'login_title' : 'register_title');
-                document.getElementById('login-form').classList.toggle('hidden', !isLogin);
-                document.getElementById('reg-form').classList.toggle('hidden', isLogin);
-                const pText = document.querySelector('#switch-txt span');
-                const btnText = document.querySelector('#switch-txt button');
-                if(isLogin) {
-                    pText.setAttribute('data-i18n', 'no_account');
-                    btnText.setAttribute('data-i18n', 'register_link');
-                    btnText.setAttribute('onclick', 'authHandler.toggleMode()');
-                } else {
-                    pText.setAttribute('data-i18n', 'have_account');
-                    btnText.setAttribute('data-i18n', 'login_link');
-                    btnText.setAttribute('onclick', 'authHandler.toggleMode()');
-                }
-                ui.updateText(); 
-            },
-
-            resetForm: () => {
-                authHandler.mode = 'login';
-                authHandler.regStep = 1;
-                document.getElementById('login-form').reset();
-                document.getElementById('reg-form').reset();
-                document.getElementById('login-form').classList.remove('hidden');
-                document.getElementById('reg-form').classList.add('hidden');
-                document.getElementById('auth-title').setAttribute('data-i18n', 'login_title');
-                
-                const pText = document.querySelector('#switch-txt span');
-                const btnText = document.querySelector('#switch-txt button');
-                if(pText && btnText) {
-                    pText.setAttribute('data-i18n', 'no_account');
-                    btnText.setAttribute('data-i18n', 'register_link');
-                    btnText.textContent = dict[state.currentLang].register_link;
-                }
-                
-                const storedRef = localStorage.getItem('refCode');
-                if(storedRef) document.getElementById('reg-ref').value = storedRef;
-
-                authHandler.nextStep(1);
-                ui.updateText();
-            },
-
-            nextStep: (step) => {
-                authHandler.regStep = step;
-                [1, 2, 3].forEach(s => {
-                    const stepEl = document.getElementById(`step-${s}`);
-                    const dotEl = document.getElementById(`dot-${s}`);
-                    if (stepEl) stepEl.classList.toggle('hidden', s !== step);
-                    if (dotEl) dotEl.className = `step-dot ${s === step ? 'active' : ''}`;
-                });
-            },
-
-            login: async (e) => {
-                e.preventDefault();
-                const input = document.getElementById('login-input').value.trim();
-                const pass = document.getElementById('login-pass').value;
-                const btn = e.target.querySelector('button[type="submit"]'); 
-                ui.loading(btn, true);
-
-                try {
-                    const res = await fetch('/api/login', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ input, password: pass })
-                    });
-                    const data = await res.json();
-                    
-                    if(data.success) {
-                        localStorage.setItem('uid', data.uid);
-                        state.userUid = data.uid;
-                        window.location.reload();
-                    } else {
-                        ui.showError('auth-alert', data.message);
-                    }
-                } catch (err) {
-                    ui.showError('auth-alert', "Network Error");
-                } finally {
-                    ui.loading(btn, false);
-                }
-            },
-
-            register: async (e) => {
-                e.preventDefault();
-                const name = document.getElementById('reg-name').value.trim();
-                const user = document.getElementById('reg-username').value.trim();
-                const email = document.getElementById('reg-email').value.trim();
-                const pass = document.getElementById('reg-pass').value;
-                const conf = document.getElementById('reg-confirm').value;
-                const ref = document.getElementById('reg-ref').value.trim();
-                const btn = e.target.querySelector('button[type="submit"]'); 
-
-                const nameRegex = /^[a-zA-Z0-9\s.,:]{3,25}$/;
-                const userRegex = /^[a-zA-Z0-9_]{5,20}$/;
-
-                if (!nameRegex.test(name)) return ui.showError('auth-alert', "Name: 3-25 chars, No Emojis/Special chars");
-                if (!userRegex.test(user)) return ui.showError('auth-alert', "Username: 5-20 chars, English letters/numbers/_ only");
-                if (pass !== conf) return ui.showError('auth-alert', "Passwords do not match");
-                if (!name || !user || !email) return ui.showError('auth-alert', "Fill all fields");
-
-                ui.loading(btn, true);
-
-                try {
-                    const res = await fetch('/api/register', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ username: user, email, password: pass, fullname: name, refCode: ref })
-                    });
-                    const data = await res.json();
-
-                    if(data.success) {
-                        localStorage.setItem('uid', data.uid);
-                        state.userUid = data.uid;
-                        if(data.refMessage) alert(data.refMessage);
-                        window.location.reload();
-                    } else {
-                        ui.showError('auth-alert', data.message);
-                    }
-                } catch (err) {
-                    ui.showError('auth-alert', "Network Error");
-                } finally {
-                    ui.loading(btn, false);
-                }
-            }
-        };
-        
-        ui.loading = (btn, isLoading) => {
-            if(!btn) return;
-            const txt = btn.querySelector('.btn-text');
-            const spn = btn.querySelector('.spinner');
-            if(txt) txt.classList.toggle('hidden', isLoading);
-            if(spn) spn.classList.toggle('hidden', !isLoading);
-            btn.disabled = isLoading;
-        };
-
-        const app = {
-            currentPage: 'dashboard',
-            
-            init: async () => {
-                document.getElementById('login-form').addEventListener('submit', authHandler.login);
-                document.getElementById('reg-form').addEventListener('submit', authHandler.register);
-                document.getElementById('chatInput').addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-                    if(this.value === '') this.style.height = 'auto';
-                });
-                
-                const path = window.location.pathname;
-                if(path.startsWith('/ref/')) {
-                    const refCode = path.split('/')[2];
-                    if(refCode) {
-                        localStorage.setItem('refCode', refCode);
-                    }
-                    if(state.userUid) window.history.replaceState({}, document.title, "/");
-                }
-
-                if(state.userUid) {
-                    state.isGuest = false;
-                    await app.fetchData();
-                } else {
-                    state.isGuest = true;
-                    if(path.startsWith('/ref/')) {
-                        authHandler.trigger();
-                        authHandler.toggleMode();
-                    }
-                    app.updateUI();
-                    app.nav('dashboard', true);
-                }
-                
-                ui.updateText();
-            },
-
-            fetchData: async () => {
-                try {
-                    const res = await fetch(`/api/dashboard?uid=${state.userUid}`);
-                    const d = await res.json();
-                    if(d.user) {
-                        state.data = d.user;
-                        state.settings = d.settings || {};
-                        state.tasks = d.tasks || {};
-                        state.plans = d.plans || {};
-                        state.refChallenges = d.challenges || [];
-                        state.pendingActivation = d.pendingActivation || false;
-                        state.pendingPlan = d.pendingPlan || false;
-                        app.updateUI();
-                        app.nav(app.currentPage, true);
-                    } else {
-                        localStorage.removeItem('uid');
-                        window.location.reload();
-                    }
-                } catch(e) { console.error(e); }
-            },
-
-            updateUI: () => {
-                const name = state.isGuest ? window.appLang.t('guest') : state.data.username;
-                const status = state.isGuest ? "Login Required" : (state.data.isAccountActive ? window.appLang.t('verified') : window.appLang.t('inactive'));
-                const img = "https://iili.io/fWs359j.jpg";
-
-                ['sidebar', 'header'].forEach(p => {
-                    if (document.getElementById(`${p}-name`)) document.getElementById(`${p}-name`).textContent = name;
-                    if (document.getElementById(`${p}-status`)) {
-                        const el = document.getElementById(`${p}-status`);
-                        el.textContent = status;
-                        el.className = `text-xs font-bold ${state.isGuest ? 'text-gray-400' : (state.data.isAccountActive ? 'text-green-400' : 'text-red-400')}`;
-                    }
-                    document.getElementById(`${p}-avatar`).src = img;
-                });
-
-                const authBtn = document.getElementById('auth-btn');
-                authBtn.innerHTML = state.isGuest 
-                    ? `<i class="fas fa-sign-in-alt w-8"></i> ${window.appLang.t('login')}`
-                    : `<i class="fas fa-sign-out-alt w-8"></i> ${window.appLang.t('logout')}`;
-                
-                authBtn.onclick = state.isGuest ? authHandler.trigger : window.handleLogoutClick;
-            },
-
-            nav: (page, force = false) => {
-                if (page === app.currentPage && !force) return;
-                app.currentPage = page;
-                
-                document.querySelectorAll('.nav-item, .bottom-nav-item, .home-btn').forEach(el => el.classList.remove('active'));
-                document.querySelectorAll(`[data-page="${page}"]`).forEach(el => el.classList.add('active'));
-
-                const content = document.getElementById('content-area');
-                content.innerHTML = `<div class="max-w-4xl mx-auto">${ui.skeleton('h-32')}${ui.skeleton()}${ui.skeleton()}</div>`;
-                
-                const titleMap = { 
-                    premium_plan: window.appLang.t('plan'), 
-                    my_job: window.appLang.t('task'),
-                    payment: window.appLang.t('withdraw'),
-                    gmail_sell: window.appLang.t('gmail_sell')
-                };
-                document.getElementById('header-title').textContent = titleMap[page] || window.appLang.t(page);
-
-                setTimeout(() => {
-                    content.innerHTML = pages[page] ? pages[page]() : pages.dashboard();
-                    ui.updateText();
-                    if(document.body.clientWidth < 768) {
-                        document.getElementById('sidebar').classList.add('-translate-x-full');
-                        document.getElementById('sidebar-overlay').classList.add('hidden');
-                    }
-                    if(page === 'gmail_sell' && !state.isGuest && state.data.isAccountActive) {
-                        ui.openGmailRules();
-                    }
-                }, 100);
-            }
-        };
-
-        const pages = {
-            dashboard: () => {
-                const bal = state.data.balance || 0;
-                const wd = state.data.totalWithdraw || 0;
-                const inc = bal + wd;
-                const refs = state.data.referrals ? Object.keys(state.data.referrals).length : 0;
-                const fee = state.settings.activationFee || 100;
-
-                let banner = '';
-                if (state.isGuest) {
-                    banner = `<div class="glass-panel p-6 mb-6 border-l-4 border-indigo-500 flex justify-between items-center"><div><h2 class="text-lg font-bold text-gray-800">${window.appLang.t('welcome')}</h2><p class="text-sm text-gray-500">${window.appLang.t('no_access_desc')}</p></div><button onclick="authHandler.trigger()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow">${window.appLang.t('login')}</button></div>`;
-                } else if (!state.data.isAccountActive) {
-                    if (state.pendingActivation) {
-                        banner = `<div class="glass-panel p-6 mb-6 border-l-4 border-yellow-500 relative overflow-hidden"><div class="relative z-10"><h2 class="text-lg font-bold text-yellow-600"><i class="fas fa-clock mr-2"></i> ${window.appLang.t('pending')}</h2><p class="text-sm text-gray-600 mb-3">${window.appLang.t('pending_act')}</p><button disabled class="px-5 py-2 bg-yellow-400 text-white rounded-lg shadow cursor-not-allowed">Processing...</button></div></div>`;
-                    } else {
-                        banner = `<div class="glass-panel p-6 mb-6 border-l-4 border-red-500 relative overflow-hidden"><div class="relative z-10"><h2 class="text-lg font-bold text-red-600"><i class="fas fa-lock mr-2"></i> ${window.appLang.t('act_msg')}</h2><p class="text-sm text-gray-600 mb-3">${window.appLang.t('act_desc')}</p><button onclick="window.initPayment('Activation', ${fee})" class="px-5 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700">${window.appLang.t('activate')} (${fee}৳)</button></div><i class="fas fa-shield-alt absolute right-[-10px] bottom-[-20px] text-9xl text-red-500/10 z-0"></i></div>`;
-                    }
-                }
-
-                const card = (i, v, l, c) => `
-                    <div class="dash-card bg-white shadow-sm border border-gray-100">
-                        <div class="z-10">
-                            <h3 class="text-2xl font-bold text-gray-800">${state.isGuest ? '-' : v}</h3>
-                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-1">${window.appLang.t(l)}</p>
-                        </div>
-                        <i class="fas ${i} card-icon-bg text-${c}-500"></i>
-                    </div>`;
-
-                const rawLink = state.data.refId || '...';
-                const fullUrl = state.data.refId ? `${window.location.origin}/ref/${state.data.refId}` : '';
-                const refAmount = state.settings.refBonus || 20;
-                const refRewardText = window.appLang.t('ref_reward_txt').replace('{amount}', refAmount);
-                
-                const refSec = (!state.isGuest && state.data.isAccountActive) ? `
-                    <div class="glass-panel p-6 bg-white mt-6">
-                        <h3 class="font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-share-alt mr-2 text-indigo-500"></i> ${window.appLang.t('share')}</h3>
-                        <div class="flex items-center space-x-2 bg-gray-50 p-3 rounded-xl border border-gray-200 overflow-hidden">
-                            <div class="flex-1 overflow-hidden">
-                                <code class="text-indigo-600 font-mono text-xl font-bold">${rawLink}</code>
-                            </div>
-                            <button data-link="${fullUrl}" onclick="window.copyRef(this)" class="p-2 bg-white shadow rounded-lg hover:bg-gray-50 flex-shrink-0"><i class="fas fa-copy text-gray-600"></i></button>
-                        </div>
-                        <p class="text-xs italic text-gray-500 mt-2 text-center font-medium">${refRewardText}</p>
-                    </div>` : '';
-
-                return `<div class="max-w-5xl mx-auto fade-in">${banner}<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">${card('fa-coins', inc.toFixed(2)+'৳', 'income', 'indigo')}${card('fa-wallet', bal.toFixed(2)+'৳', 'balance', 'green')}${card('fa-hand-holding-usd', wd.toFixed(2)+'৳', 'withdraw', 'purple')}${card('fa-users', refs, 'ref', 'pink')}</div>${refSec}</div>`;
-            },
-
-            my_job: () => {
-                if (state.isGuest) return ui.authBlock();
-                if (!state.data.isAccountActive) return ui.inactiveBlock();
-
-                const todayActiveRefs = state.data.todayActiveRefs || 0; 
-                
-                let refHtml = `<div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6 relative overflow-hidden"><h3 class="font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-trophy text-yellow-500 mr-2"></i> ${window.appLang.t('ref_challenge')}</h3><div class="grid grid-cols-3 gap-2">`;
-                
-                refHtml += state.refChallenges.map((tier, idx) => {
-                    const achieved = todayActiveRefs >= tier.target;
-                    const claimed = state.data.dailyRefClaims && state.data.dailyRefClaims[tier.target];
-                    let btnClass = achieved && !claimed ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-400 cursor-not-allowed";
-                    let btnTxt = claimed ? window.appLang.t('claimed') : window.appLang.t('claim_now');
-                    
-                    return `<div class="text-center p-2 bg-gray-50 rounded-lg border border-gray-200">
-                        <p class="text-xs font-bold text-gray-500 mb-1">${tier.target} ${window.appLang.t('active_ref')}</p>
-                        <p class="text-lg font-bold text-indigo-600 mb-2">${tier.reward}৳</p>
-                        <button onclick="window.claimRefReward(${tier.target}, ${tier.reward})" ${!achieved || claimed ? 'disabled' : ''} class="w-full py-1 rounded text-xs font-bold ${btnClass}">${btnTxt}</button>
-                    </div>`;
-                }).join('');
-                refHtml += `</div></div>`;
-
-                const gmailHtml = `<div onclick="app.nav('gmail_sell')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6 flex items-center justify-between cursor-pointer hover:shadow-md transition group"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xl group-hover:bg-red-500 group-hover:text-white transition"><i class="fas fa-envelope"></i></div><div><h3 class="font-bold text-gray-800 text-lg">${window.appLang.t('gmail_sell')}</h3><p class="text-xs text-gray-500">Sell Gmail & Earn Money</p></div></div><i class="fas fa-chevron-right text-gray-300"></i></div>`;
-
-                let claimHtml = '';
-                if(state.data.premiumPlan) {
-                    const planName = state.data.premiumPlan;
-                    const plan = Object.values(state.plans).find(p => p.name === planName);
-                    if(plan) {
-                         const profit = plan.price * 0.10; 
-                         const totalReturn = plan.price + profit;
-                         const dailyAmount = totalReturn / parseInt(plan.durationDays);
-                         const todayStr = new Date().toISOString().split('T')[0];
-                         const lastClaim = state.data.lastClaimDate || "";
-                         const canClaim = lastClaim !== todayStr;
-                         claimHtml = `<div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-5 mb-6 text-white shadow-lg relative overflow-hidden"><div class="relative z-10 flex justify-between items-center"><div><p class="text-xs text-indigo-100 uppercase font-bold tracking-wider">${window.appLang.t('daily_claim')}</p><h3 class="text-xl font-bold">${planName}</h3><p class="text-sm mt-1 opacity-90">${dailyAmount.toFixed(2)}৳ / Day</p></div><button onclick="window.claimDaily(${dailyAmount})" ${!canClaim ? 'disabled' : ''} class="px-5 py-2 ${canClaim ? 'bg-white text-indigo-600 hover:bg-gray-100' : 'bg-gray-400 text-gray-200 cursor-not-allowed'} rounded-lg font-bold shadow-md transition">${canClaim ? window.appLang.t('claim_now') : window.appLang.t('claimed')}</button></div><i class="fas fa-calendar-check absolute -right-4 -bottom-4 text-8xl text-white opacity-10"></i></div>`;
-                    }
-                }
-
-                const tasks = state.tasks.basic || {}; 
-                const today = new Date().toISOString().split('T')[0];
-                const lastTaskDate = state.data.lastTaskDate || "";
-                
-                const taskList = Object.entries(tasks).map(([id, t]) => {
-                    const isCompleted = state.data.completedTasks && state.data.completedTasks[id];
-                    const dailyLimitReached = lastTaskDate === today;
-                    const isDisabled = isCompleted || dailyLimitReached;
-                    
-                    const btnClass = isDisabled 
-                        ? "bg-gray-800 text-gray-500 cursor-not-allowed btn-blocked" 
-                        : "bg-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white shadow";
-                    
-                    const btnAction = isDisabled ? "" : `onclick="window.runTask('${id}', '${t.link}', ${t.reward}, this)"`;
-                    
-                    return `
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between gap-3 transition hover:shadow-md">
-                        <div class="flex items-center gap-3 flex-1 overflow-hidden">
-                            <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-bold text-gray-800 truncate">${t.name}</p>
-                                <p class="text-green-600 font-bold text-sm">+${t.reward}৳</p>
-                            </div>
-                        </div>
-                        <button ${btnAction} ${isDisabled ? 'disabled' : ''} class="w-10 h-10 rounded-full transition flex items-center justify-center text-lg flex-shrink-0 ${btnClass}">
-                            <i class="fas ${isDisabled ? 'fa-ban' : 'fa-play'}"></i>
-                        </button>
-                    </div>`;
-                }).join('');
-
-                return `<div class="max-w-2xl mx-auto fade-in">${refHtml}${gmailHtml}${claimHtml}<div class="space-y-3">${taskList || `<div class="text-center text-gray-400 mt-10">No Tasks Available</div>`}</div></div>`;
-            },
-
-            gmail_sell: () => {
-                if (state.isGuest) return ui.authBlock();
-                if (!state.data.isAccountActive) return ui.inactiveBlock();
-
-                fetch(`/api/gmail_page?uid=${state.userUid}`).then(r=>r.json()).then(d=>{
-                    state.data.gmailSubmissions = d.submissions;
-                    state.gmailSettings = d.settings;
-                    
-                    const passEl = document.getElementById('gp-pass');
-                    const msg = window.appLang.t('gmail_msg').replace('{pass}', d.settings.password || '...');
-                    if(passEl) passEl.textContent = msg;
-                    
-                    const rateEl = document.getElementById('gp-rate');
-                    if(rateEl) rateEl.textContent = `Rate: ${d.settings.price}৳`;
-                    
-                    renderGmailList(d.submissions);
-                });
-                
-                function renderGmailList(submissions) {
-                    const list = submissions ? Object.values(submissions).reverse() : [];
-                    const recent = list.slice(0, 5);
-                    const tbody = document.getElementById('gmail-list-body');
-                    if(tbody) {
-                        tbody.innerHTML = recent.length ? recent.map(g => `
-                            <div class="p-4 flex justify-between items-center hover:bg-gray-50">
-                                <div class="overflow-hidden mr-3 flex-1">
-                                    <p class="font-bold text-gray-800 truncate">${g.email}</p>
-                                </div>
-                                <div class="text-right flex-shrink-0">
-                                    <span class="block text-xs font-bold uppercase ${g.status=='approved'?'text-green-600':(g.status=='rejected'?'text-red-500':'text-orange-500')}">${window.appLang.t(g.status)}</span>
-                                    <span class="text-sm font-bold text-gray-600">${g.price}৳</span>
-                                </div>
-                            </div>
-                        `).join('') : `<div class="p-8 text-center text-gray-400">${window.appLang.t('no_rec')}</div>`;
-                        
-                        const total = list.length;
-                        const approved = list.filter(g => g.status === 'approved').length;
-                        const rejected = list.filter(g => g.status === 'rejected').length;
-                        const earned = list.filter(g => g.status === 'approved').reduce((acc, curr) => acc + (curr.price || 0), 0);
-                        const holding = list.filter(g => g.status === 'pending').reduce((acc, curr) => acc + (curr.price || 0), 0);
-                        const avg = approved > 0 ? (earned / approved).toFixed(2) : '0.00';
-                        
-                        document.getElementById('gs-total').innerText = total;
-                        document.getElementById('gs-app').innerText = approved;
-                        document.getElementById('gs-rej').innerText = rejected;
-                        document.getElementById('gs-avg').innerText = avg + '৳';
-                        document.getElementById('gs-earn').innerText = earned + '৳';
-                        document.getElementById('gs-hold').innerText = holding + '৳';
-                    }
-                }
-
-                return `<div class="max-w-3xl mx-auto fade-in">
-                    <div class="flex items-center mb-6">
-                        <button onclick="app.nav('my_job')" class="mr-4 text-gray-500 hover:text-indigo-600"><i class="fas fa-arrow-left text-xl"></i></button>
-                        <h2 class="text-2xl font-bold text-gray-800">${window.appLang.t('gmail_sell')}</h2>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                         <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center">
-                            <p class="text-xs text-gray-500 uppercase font-bold">${window.appLang.t('total_sold')}</p>
-                            <h3 class="text-2xl font-bold text-gray-800" id="gs-total">-</h3>
-                         </div>
-                         <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center">
-                            <p class="text-xs text-gray-500 uppercase font-bold text-green-600">${window.appLang.t('approved')}</p>
-                            <h3 class="text-2xl font-bold text-green-600" id="gs-app">-</h3>
-                         </div>
-                         <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center">
-                            <p class="text-xs text-gray-500 uppercase font-bold text-red-500">${window.appLang.t('rejected')}</p>
-                            <h3 class="text-2xl font-bold text-red-500" id="gs-rej">-</h3>
-                         </div>
-                         <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center">
-                            <p class="text-xs text-gray-500 uppercase font-bold text-indigo-500">${window.appLang.t('avg_rate')}</p>
-                            <h3 class="text-2xl font-bold text-indigo-600" id="gs-avg">-</h3>
-                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 mb-8">
-                         <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-5 rounded-2xl text-white shadow-lg">
-                            <p class="text-xs opacity-80 uppercase font-bold">Total Earned</p>
-                            <h3 class="text-3xl font-bold" id="gs-earn">-</h3>
-                         </div>
-                         <div class="bg-gradient-to-r from-orange-400 to-orange-500 p-5 rounded-2xl text-white shadow-lg">
-                            <p class="text-xs opacity-80 uppercase font-bold">${window.appLang.t('hold')}</p>
-                            <h3 class="text-3xl font-bold" id="gs-hold">-</h3>
-                         </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold text-gray-800" data-i18n="submit_new_gmail">${window.appLang.t('submit_new_gmail')}</h3>
-                            <span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded font-bold" id="gp-rate">Rate: ...</span>
-                        </div>
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-4 cursor-pointer hover:bg-blue-100 transition" onclick="window.copyPass(this)">
-                            <p class="text-sm text-blue-800 font-medium" id="gp-pass">Loading...</p>
-                        </div>
-                        <form onsubmit="window.submitGmail(event)" class="space-y-4">
-                            <input type="email" id="gmail-input" placeholder="Enter created gmail..." class="w-full p-3 input-pro rounded-xl" required>
-                            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold shadow-lg">${window.appLang.t('submit_email')}</button>
-                        </form>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-                         <div class="p-4 bg-gray-50 border-b border-gray-200 font-bold text-gray-500 text-sm" data-i18n="recent_sub">${window.appLang.t('recent_sub')}</div>
-                         <div class="divide-y divide-gray-100" id="gmail-list-body">
-                            <div class="p-8 text-center text-gray-400">Loading...</div>
-                         </div>
-                    </div>
-                </div>`;
-            },
-
-            premium_plan: () => {
-                if (state.isGuest) return ui.authBlock();
-                if (!state.data.isAccountActive) return ui.inactiveBlock();
-
-                const currentPlan = state.data.premiumPlan;
-                const plans = Object.values(state.plans);
-
-                if(plans.length === 0) {
-                     return `<div class="text-center mt-20 fade-in"><div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl"><i class="fas fa-box-open"></i></div><h3 class="text-xl font-bold text-gray-600" data-i18n="no_plan_found">${window.appLang.t('no_plan_found')}</h3></div>`;
-                }
-
-                return `<div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-6 fade-in">
-                    ${plans.map(p => {
-                        const isPurchased = currentPlan === p.name;
-                        const isPending = state.pendingPlan && !isPurchased; 
-                        
-                        let btn = `<button onclick="window.initPayment('Plan Purchase', ${p.price}, '${p.name}')" class="w-full btn-primary py-3 rounded-xl font-bold shadow-lg shadow-indigo-200" data-i18n="buy_now">${window.appLang.t('buy_now')}</button>`;
-                        
-                        if(isPurchased) btn = `<button disabled class="w-full btn-disabled py-3 rounded-xl font-bold" data-i18n="already_purchased">${window.appLang.t('already_purchased')}</button>`;
-                        else if(isPending) btn = `<button disabled class="w-full bg-yellow-400 text-white cursor-not-allowed py-3 rounded-xl font-bold">Request Pending</button>`;
-
-                        return `
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border ${isPurchased ? 'border-green-50 bg-green-50' : 'border-indigo-50'} relative overflow-hidden hover:-translate-y-1 transition duration-300">
-                            ${isPurchased ? '<div class="absolute top-0 right-0 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-bl-xl">ACTIVE</div>' : '<div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-bl-xl">VIP</div>'}
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">${p.name}</h3>
-                            <p class="text-3xl font-extrabold text-indigo-600 mb-4">${p.price}<span class="text-sm font-normal text-gray-400">৳</span></p>
-                            <p class="text-sm text-gray-500 mb-4">${p.durationDays} Days Duration</p>
-                            ${btn}
-                        </div>`;
-                    }).join('')}
-                </div>`;
-            },
-
-            payment: () => {
-                if (state.isGuest) return ui.authBlock();
-                if (!state.data.isAccountActive) return ui.inactiveBlock();
-
-                const methods = [
-                    { name: 'Bkash', img: 'https://iili.io/fWimLbt.jpg' }, 
-                    { name: 'Nagad', img: 'https://iili.io/fWimtXn.jpg' }
-                ];
-
-                const minWithdraw = state.settings.minWithdraw || 100;
-                const minText = window.appLang.t('min_withdraw_txt').replace('{amount}', minWithdraw);
-                
-                return `<div class="max-w-md mx-auto space-y-4 fade-in">
-                    <div class="bg-indigo-600 rounded-2xl p-6 text-white mb-6 shadow-lg shadow-indigo-200">
-                        <p class="text-indigo-200 text-sm" data-i18n="balance">${window.appLang.t('balance')}</p>
-                        <h2 class="text-4xl font-bold">${state.data.balance.toFixed(2)}৳</h2>
-                    </div>
-                    ${methods.map(m => `
-                        <div onclick="window.openWithdrawModal('${m.name}')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                            <div class="flex items-center space-x-4">
-                                <img src="${m.img}" class="method-icon">
-                                <span class="font-bold text-gray-700 text-lg">${window.appLang.t('method_' + m.name.toLowerCase())}</span>
-                            </div>
-                            <i class="fas fa-chevron-right text-gray-300"></i>
-                        </div>
-                    `).join('')}
-                    <div class="text-center text-xs text-gray-500 mt-4">${minText}</div>
-                </div>`;
-            },
-
-            history: () => {
-                if (state.isGuest) return ui.authBlock();
-                if (!state.data.isAccountActive) return ui.inactiveBlock();
-                
-                return `<div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
-                            <tr><th class="p-4">Date</th><th class="p-4">Details</th><th class="p-4 text-right">Amount</th><th class="p-4 text-center">Status</th></tr>
-                        </thead>
-                        <tbody class="text-sm text-gray-600" id="hist-body">
-                            <tr><td colspan="4" class="p-8 text-center text-gray-400" data-i18n="loading_rec">${window.appLang.t('loading_rec')}</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <script>
-                    setTimeout(() => {
-                        fetch('/api/history?uid=${state.userUid}').then(r=>r.json()).then(txs => {
-                            const tbody = document.getElementById('hist-body');
-                            if(!txs || txs.length === 0) { 
-                                tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center" data-i18n="no_rec">${window.appLang.t('no_rec')}</td></tr>'; 
-                                return; 
-                            }
-                            txs.sort((a,b) => new Date(b.date) - new Date(a.date));
-                            tbody.innerHTML = txs.map(t => {
-                                let statusClass = 'bg-yellow-100 text-yellow-700';
-                                if(t.status === 'approved') statusClass = 'bg-green-100 text-green-700';
-                                if(t.status === 'rejected') statusClass = 'bg-red-100 text-red-700';
-                                return \`
-                                <tr class="border-t border-gray-100 hover:bg-gray-50">
-                                    <td class="p-4">\${new Date(t.date).toLocaleDateString()}</td>
-                                    <td class="p-4 font-medium">\${t.type} <br><span class="text-xs text-gray-400">\${t.details || ''}</span></td>
-                                    <td class="p-4 text-right font-bold">\${Math.abs(t.amount)}</td>
-                                    <td class="p-4 text-center"><span class="px-2 py-1 rounded-full text-xs \${statusClass}">\${window.appLang.t(t.status)}</span></td>
-                                </tr>\`;
-                            }).join('');
-                        });
-                    }, 500);
-                <\/script>`;
-            },
-
-            profile: () => {
-                if (state.isGuest) return ui.authBlock();
-                const d = state.data;
-                const profileImg = "https://iili.io/fWs359j.jpg";
-                return `<div class="max-w-md mx-auto fade-in">
-                    <div class="glass-panel p-8 flex flex-col items-center bg-white relative mb-6">
-                        <button onclick="window.openProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-indigo-600"><i class="fas fa-edit"></i></button>
-                        <img src="${profileImg}" class="w-24 h-24 rounded-full border-4 border-indigo-100 shadow-xl mb-4 object-cover">
-                        <h2 class="text-2xl font-bold text-gray-800 text-center">${d.fullname || d.username}</h2>
-                        <p class="text-gray-500 text-sm">@${d.username}</p>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-sm p-4 space-y-4">
-                        <div class="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
-                            <span class="text-gray-600 font-medium" data-i18n="language"><i class="fas fa-language mr-3 text-indigo-400 text-xl"></i> ${window.appLang.t('language')}</span>
-                            <div class="flex space-x-2">
-                                <button onclick="window.appLang.set('en')" class="px-2 py-1 text-xs rounded ${state.currentLang=='en'?'bg-indigo-600 text-white':'bg-gray-100'}">EN</button>
-                                <button onclick="window.appLang.set('bn')" class="px-2 py-1 text-xs rounded ${state.currentLang=='bn'?'bg-indigo-600 text-white':'bg-gray-100'}">BN</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            }
-        };
-
-        ui.authBlock = () => `<div class="text-center mt-20 fade-in"><div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500 text-2xl"><i class="fas fa-lock"></i></div><h3 class="text-xl font-bold text-gray-800">${window.appLang.t('no_access')}</h3><p class="text-gray-500 mb-6">${window.appLang.t('no_access_desc')}</p><button onclick="authHandler.trigger()" class="btn-primary px-8 py-3 rounded-xl font-bold shadow-lg">${window.appLang.t('login')}</button></div>`;
-        ui.inactiveBlock = () => `<div class="text-center mt-20 fade-in"><div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 text-2xl"><i class="fas fa-ban"></i></div><h3 class="text-xl font-bold text-gray-800">${window.appLang.t('act_msg')}</h3><p class="text-gray-500 mb-6">${window.appLang.t('act_desc')}</p></div>`;
-
-        window.openWithdrawModal = (method) => {
-            if (!state.data.isAccountActive) return alert(window.appLang.t('act_desc'));
-            const translatedMethod = window.appLang.t('method_' + method.toLowerCase());
-            const title = window.appLang.t('withdraw_header').replace('{method}', translatedMethod);
-            const methodImg = method === 'Bkash' ? 'https://iili.io/fWimLbt.jpg' : 'https://iili.io/fWimtXn.jpg';
-
-            const content = `
-                <div class="text-center">
-                    <img src="${methodImg}" class="w-16 h-16 rounded-full mx-auto mb-4 border-2 border-gray-100 object-cover">
-                    <h3 class="text-xl font-bold mb-4">${title}</h3>
-                    <form onsubmit="window.submitWithdraw(event, '${method}')" class="space-y-4 text-left">
-                        <div>
-                            <label class="text-xs font-bold text-gray-500 uppercase">${window.appLang.t('label_num')}</label>
-                            <input type="tel" name="num" class="w-full p-3 input-pro rounded-xl" placeholder="${window.appLang.t('ph_num')}" required>
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-500 uppercase">${window.appLang.t('label_amt')}</label>
-                            <input type="number" name="amt" class="w-full p-3 input-pro rounded-xl" placeholder="${window.appLang.t('ph_amt')}" required>
-                        </div>
-                        <button class="btn-primary w-full py-3 rounded-xl font-bold" data-i18n="withdraw">${window.appLang.t('withdraw')}</button>
-                    </form>
-                </div>`;
-            document.getElementById('gen-modal-content').innerHTML = content;
-            ui.openModal('gen-modal');
-        };
-
-        window.submitWithdraw = async (e, method) => {
-            e.preventDefault();
-            const num = e.target.num.value;
-            const amt = parseFloat(e.target.amt.value);
-            const minWithdraw = state.settings.minWithdraw || 100;
-
-            if(amt < minWithdraw) {
-                 return alert(window.appLang.t('min_withdraw_txt').replace('{amount}', minWithdraw));
-            }
-            
-            const btn = e.target.querySelector('button');
-            btn.disabled = true;
-
-            try {
-                const res = await fetch('/api/withdraw', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ uid: state.userUid, amount: amt, method: method, number: num })
-                });
-                const d = await res.json();
-                if(d.success) {
-                    ui.closeModal('gen-modal');
-                    alert("Withdrawal Requested");
-                    window.location.reload();
-                } else {
-                    alert(d.message);
-                }
-            } catch(e) { alert("Error"); }
-            btn.disabled = false;
-        };
-
-        window.initPayment = (type, amount, detail) => {
-            if (!state.userUid) return authHandler.trigger();
-            
-            const content = `
-                <div id="pay-step-1" class="text-center">
-                    <h3 class="text-lg font-bold text-indigo-600 mb-4">${window.appLang.t('select_method')}</h3>
-                    <div class="space-y-3 mb-6">
-                        <label class="cursor-pointer block">
-                            <input type="radio" name="pay-method" value="Bkash" class="hidden payment-radio" checked>
-                            <div class="p-4 rounded-xl border-2 border-gray-100 flex items-center justify-between hover:border-indigo-100 transition">
-                                <div class="flex items-center gap-3">
-                                    <img src="https://iili.io/fWimLbt.jpg" class="w-10 h-10 rounded-full object-cover">
-                                    <span class="font-bold text-gray-700">${window.appLang.t('method_bkash')}</span>
-                                </div>
-                                <i class="fas fa-check-circle text-indigo-600 hidden check-icon"></i>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer block">
-                            <input type="radio" name="pay-method" value="Nagad" class="hidden payment-radio">
-                            <div class="p-4 rounded-xl border-2 border-gray-100 flex items-center justify-between hover:border-indigo-100 transition">
-                                <div class="flex items-center gap-3">
-                                    <img src="https://iili.io/fWimtXn.jpg" class="w-10 h-10 rounded-full object-cover">
-                                    <span class="font-bold text-gray-700">${window.appLang.t('method_nagad')}</span>
-                                </div>
-                                <i class="fas fa-check-circle text-indigo-600 hidden check-icon"></i>
-                            </div>
-                        </label>
-                    </div>
-                    <button onclick="window.goToPayStep2('${type}', ${amount}, '${detail||''}')" class="btn-primary w-full py-3 rounded-xl font-bold" data-i18n="next">${window.appLang.t('next')}</button>
-                </div>
-                <div id="pay-step-2" class="hidden text-center"></div>`;
-            document.getElementById('gen-modal-content').innerHTML = content;
-            ui.openModal('gen-modal');
-        };
-
-        window.goToPayStep2 = (type, amount, detail) => {
-            const methodVal = document.querySelector('input[name="pay-method"]:checked').value;
-            const methodKey = methodVal.toLowerCase();
-            const methodName = window.appLang.t('method_' + methodKey);
-            const num = state.settings.paymentInfo ? state.settings.paymentInfo[methodKey] : "01XXX";
-            
-            const html = `
-                <h3 class="text-lg font-bold text-indigo-600 mb-2">${type}</h3>
-                <p class="text-2xl font-bold mb-4">${amount}৳</p>
-                <div class="bg-gray-100 p-4 rounded-xl mb-4">
-                    <p class="text-xs text-gray-500">${window.appLang.t('pay_step2_header')}</p>
-                    <p class="text-lg font-mono font-bold text-gray-800 flex items-center justify-center gap-2">
-                        <span id="pay-num-txt">${num}</span> 
-                        <button onclick="window.copyPayNum()" class="text-indigo-600 hover:text-indigo-800 p-1"><i class="fas fa-copy"></i></button>
-                    </p>
-                    <p class="text-xs text-gray-400 mt-1">(${methodName})</p>
-                </div>
-                <form onsubmit="window.submitPayment(event, '${type}', ${amount}, '${detail||''}', '${methodVal}')" class="space-y-3">
-                    <input type="text" id="trx-id" placeholder="${window.appLang.t('trx_ph')}" class="w-full p-3 input-pro rounded-xl" required>
-                    <div class="flex gap-2">
-                        <button type="button" onclick="document.getElementById('pay-step-1').classList.remove('hidden');document.getElementById('pay-step-2').classList.add('hidden')" class="w-1/3 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold">${window.appLang.t('back')}</button>
-                        <button type="submit" class="btn-primary w-2/3 py-3 rounded-xl font-bold" data-i18n="submit">${window.appLang.t('submit')}</button>
-                    </div>
-                </form>`;
-            
-            const s2 = document.getElementById('pay-step-2');
-            s2.innerHTML = html;
-            document.getElementById('pay-step-1').classList.add('hidden');
-            s2.classList.remove('hidden');
-        };
-
-        window.copyPayNum = () => {
-             const num = document.getElementById('pay-num-txt').innerText;
-             navigator.clipboard.writeText(num);
-             alert(window.appLang.t('copied'));
-        };
-
-        window.submitPayment = async (e, type, amount, detail, method) => {
-            e.preventDefault();
-            const trx = document.getElementById('trx-id').value;
-            
-            let endpoint = '/api/buy_plan';
-            if(type === 'Activation') endpoint = '/api/activate';
-
-            try {
-                const res = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        uid: state.userUid, 
-                        amount, 
-                        trxId: trx, 
-                        method, 
-                        planName: detail 
-                    })
-                });
-                const d = await res.json();
-                if(d.success) {
-                    ui.closeModal('gen-modal');
-                    alert("Request Submitted. Status: Pending");
-                    window.location.reload();
-                } else {
-                    alert(d.message);
-                }
-            } catch(e) { alert("Error"); }
-        };
-
-        window.claimDaily = async (amount) => {
-            try {
-                const res = await fetch('/api/claim_daily', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ uid: state.userUid, amount: amount })
-                });
-                const d = await res.json();
-                if(d.success) {
-                    alert("Daily Income Claimed!");
-                    window.location.reload();
-                } else {
-                    alert(d.message);
-                }
-            } catch(e) { alert("Error claiming reward"); }
-        };
-
-        window.claimRefReward = async (target, reward) => {
-             try {
-                const res = await fetch('/api/claim_ref_reward', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ uid: state.userUid, target: target, reward: reward })
-                });
-                const d = await res.json();
-                if(d.success) {
-                    alert("Reward Claimed!");
-                    window.location.reload();
-                } else {
-                    alert(d.message);
-                }
-             } catch(e) { alert("Error"); }
-        };
-
-        window.submitGmail = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('gmail-input').value.trim();
-            if(!email) return;
-
-            try {
-                const res = await fetch('/api/submit_gmail', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ uid: state.userUid, email })
-                });
-                const d = await res.json();
-                if(d.success) {
-                    alert("Gmail Submitted! Status: Pending");
-                    app.nav('gmail_sell', true);
-                } else {
-                    alert(d.message);
-                }
-            } catch(e) { alert("Error"); }
-        };
-
-        window.copyPass = (el) => {
-            const pass = state.gmailSettings.password;
-            if(pass) {
-                navigator.clipboard.writeText(pass);
-                const originalBg = el.className;
-                el.classList.remove('bg-blue-50', 'border-blue-100');
-                el.classList.add('bg-green-50', 'border-green-200');
-                setTimeout(() => {
-                    el.className = originalBg;
-                }, 500);
-            }
-        };
-
-        window.runTask = async (tid, link, reward, btn) => {
-            const w = window.open(link, '_blank');
-            if(!w) return alert(window.appLang.t('allow_popup'));
-            
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner border-indigo-600"></div>';
-            
-            setTimeout(async () => {
-                try {
-                    const res = await fetch('/api/complete_task', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ uid: state.userUid, taskId: tid, reward: reward })
-                    });
-                    const d = await res.json();
-                    if(d.success) {
-                        alert(`${window.appLang.t('task_complete')} +${reward}৳`);
-                        window.location.reload();
-                    } else {
-                        alert(d.message);
-                        btn.disabled = false;
-                        btn.innerHTML = '<i class="fas fa-play"></i>';
-                    }
-                } catch(e) { 
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-play"></i>';
-                }
-            }, 5000);
-        };
-        
-        window.openProfileModal = () => {
-            document.getElementById('modal-edit-fullname').value = state.data.fullname || '';
-            document.getElementById('modal-edit-username').value = state.data.username || '';
-            ui.openModal('profile-modal');
-        };
-
-        window.saveProfileModal = async () => {
-            const full = document.getElementById('modal-edit-fullname').value.trim();
-            const user = document.getElementById('modal-edit-username').value.trim();
-            
-            const nameRegex = /^[a-zA-Z0-9\s.,:]{3,25}$/;
-            const userRegex = /^[a-zA-Z0-9_]{5,20}$/;
-
-            if (!nameRegex.test(full)) return alert("Invalid Name");
-            if (!userRegex.test(user)) return alert("Invalid Username");
-
-            await fetch('/api/update_profile', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ uid: state.userUid, fullname: full, username: user })
-            });
-            window.location.reload();
-        };
-
-        window.copyRef = (btn) => {
-            const link = btn.dataset.link;
-            if(link) {
-                navigator.clipboard.writeText(link);
-                alert(window.appLang.t('copied'));
-            }
-        };
-
-        window.handleLogoutClick = () => {
-            if(confirm(window.appLang.t('logout_confirm'))) {
-                localStorage.removeItem('uid');
-                window.location.reload();
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', app.init);
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
+
 </body>
 </html>
