@@ -950,7 +950,7 @@
 
                 const rawLink = state.data.refId || '...';
                 const fullUrl = state.data.refId ? `${window.location.origin}/ref/${state.data.refId}` : '';
-                const refAmount = state.settings.refBonus || 20;
+                const refAmount = state.settings.refBonus || 25;
                 const refRewardText = window.appLang.t('ref_reward_txt').replace('{amount}', refAmount);
                 
                 const refSec = (!state.isGuest && state.data.isAccountActive) ? `
@@ -1194,7 +1194,7 @@
                     { name: 'Nagad', img: 'https://iili.io/fWimtXn.jpg' }
                 ];
 
-                const minWithdraw = state.settings.minWithdraw || 100;
+                const minWithdraw = state.settings.minWithdraw || 50;
                 const minText = window.appLang.t('min_withdraw_txt').replace('{amount}', minWithdraw);
                 
                 return `<div class="max-w-md mx-auto space-y-4 fade-in">
@@ -1312,7 +1312,7 @@
             e.preventDefault();
             const num = e.target.num.value;
             const amt = parseFloat(e.target.amt.value);
-            const minWithdraw = state.settings.minWithdraw || 100;
+            const minWithdraw = state.settings.minWithdraw || 50;
 
             if(amt < minWithdraw) {
                  return alert(window.appLang.t('min_withdraw_txt').replace('{amount}', minWithdraw));
