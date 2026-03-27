@@ -1,326 +1,367 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Coming Soon | SSC Special</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+from flask import Flask, request, jsonify
+import os
+import requests
+import json
+import time
+import re
+from datetime import datetime
+
+app = Flask(__name__)
+
+DB_URL = os.environ.get("DB_URL")
+DB_SECRET = os.environ.get("DB_SECRET")
+
+def db_request(path, method="GET", data=None):
+    url = f"{DB_URL}/{path}.json?auth={DB_SECRET}"
+    headers = {'Content-Type': 'application/json'}
     
-    <style>
-        :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #00cec9;
-            --dark-color: #2d3436;
-            --glass: rgba(255, 255, 255, 0.85);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Hind Siliguri', sans-serif;
-            background: #0f172a;
-            color: var(--dark-color);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Animated Background Particles */
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
-        }
-
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 10s infinite alternate;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 100px); }
-        }
-
-        .wrapper {
-            width: 90%;
-            max-width: 850px;
-            padding: 50px 40px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            text-align: center;
-            z-index: 1;
-            position: relative;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
-            text-transform: uppercase;
-        }
-
-        .badge i { animation: pulse 2s infinite; }
-
-        h1 {
-            font-size: clamp(2.2rem, 6vw, 3.8rem);
-            font-weight: 800;
-            background: linear-gradient(to right, #6c5ce7, #a29bfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-
-        .description {
-            font-size: 1.15rem;
-            color: #4b5563;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            line-height: 1.7;
-        }
-
-        /* Countdown Boxes */
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-
-        .time-box {
-            background: white;
-            min-width: 120px;
-            padding: 20px 10px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(108, 92, 231, 0.1);
-        }
-
-        .time-box:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-color);
-            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.2);
-        }
-
-        .num {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--dark-color);
-            display: block;
-        }
-
-        .label {
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        /* Progress Bar */
-        .progress-wrapper {
-            max-width: 500px;
-            margin: 0 auto 40px;
-        }
-        .progress-bar-bg {
-            height: 10px;
-            background: #dfe6e9;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            transition: width 1s ease;
-        }
-
-        /* Notice Section */
-        .ssc-notice {
-            background: #fff3f3;
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px dashed #fab1a0;
-            margin: 30px 0;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            text-align: left;
-        }
-
-        .notice-icon {
-            font-size: 2.5rem;
-            color: #d63031;
-        }
-
-        /* Contact & Social */
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-btn {
-            width: 45px;
-            height: 45px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: 0.3s;
-        }
-
-        .social-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: scale(1.1);
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        @media (max-width: 600px) {
-            .wrapper { padding: 40px 20px; }
-            .time-box { min-width: 80px; padding: 15px 5px; }
-            .num { font-size: 1.8rem; }
-            .ssc-notice { flex-direction: column; text-align: center; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="background">
-        <div class="circle" style="width: 400px; height: 400px; top: -100px; left: -100px;"></div>
-        <div class="circle" style="width: 300px; height: 300px; bottom: -50px; right: -50px; background: var(--secondary-color);"></div>
-    </div>
-
-    <div class="wrapper">
-        <div class="badge">
-            <i class="fas fa-rocket"></i> Launching Soon
-        </div>
+    if method == "GET":
+        r = requests.get(url)
+    elif method == "POST":
+        r = requests.post(url, data=json.dumps(data), headers=headers)
+    elif method == "PUT":
+        r = requests.put(url, data=json.dumps(data), headers=headers)
+    elif method == "PATCH":
+        r = requests.patch(url, data=json.dumps(data), headers=headers)
+    elif method == "DELETE":
+        r = requests.delete(url)
         
-        <h1>অপেক্ষা ফুরাবে খুব শীঘ্রই!</h1>
-        <p class="description">আমরা আমাদের সাইটটি আরও স্মার্ট এবং শক্তিশালী করে তুলছি। নতুন সব চমক নিয়ে আসছি আপনার জন্য।</p>
+    try:
+        return r.json()
+    except:
+        return None
 
-        <div class="countdown-container">
-            <div class="time-box">
-                <span class="num" id="days">00</span>
-                <span class="label">দিন</span>
-            </div>
-            <div class="time-box">
-                <span class="num" id="hours">00</span>
-                <span class="label">ঘণ্টা</span>
-            </div>
-            <div class="time-box">
-                <span class="num" id="minutes">00</span>
-                <span class="label">মিনিট</span>
-            </div>
-            <div class="time-box">
-                <span class="num" id="seconds">00</span>
-                <span class="label">সেকেন্ড</span>
-            </div>
-        </div>
+def sanitize_input(text, type="text"):
+    if type == "username":
+        return re.match(r'^[a-zA-Z0-9_]{5,20}$', text) is not None
+    if type == "name":
+        return re.match(r'^[a-zA-Z0-9\s.,:]{3,25}$', text) is not None
+    return True
 
-        <div class="progress-wrapper">
-            <p style="font-size: 0.8rem; margin-bottom: 8px; font-weight: 600; color: #636e72;">প্রস্তুতি সম্পন্ন হচ্ছে...</p>
-            <div class="progress-bar-bg">
-                <div class="progress-fill" id="pbar"></div>
-            </div>
-        </div>
+@app.route('/api/login', methods=['POST'])
+def login():
+    d = request.json
+    login_input = d.get('input', '').strip()
+    password = d.get('password')
+    
+    users = db_request("users", "GET")
+    
+    found_user = None
+    uid = None
+    
+    if users:
+        for k, v in users.items():
+            if (v.get('email') == login_input or v.get('username') == login_input) and v.get('password') == password:
+                found_user = v
+                uid = k
+                break
+    
+    if found_user:
+        return jsonify({"success": True, "uid": uid})
+    return jsonify({"success": False, "message": "Invalid Credentials"})
 
-        <div class="ssc-notice">
-            <div class="notice-icon"><i class="fas fa-graduation-cap"></i></div>
-            <div>
-                <strong>এসএসসি (SSC) পরীক্ষা আপডেট:</strong><br>
-                সাইট অ্যাডমিনের বোর্ড পরীক্ষা চলমান থাকায় কাজ কিছুটা ধীরগতিতে হচ্ছে। দোয়া করবেন যেন দ্রুত আপনাদের মাঝে ফিরতে পারি!
-            </div>
-        </div>
+@app.route('/api/register', methods=['POST'])
+def register():
+    d = request.json
+    username = d.get('username', '').strip()
+    email = d.get('email', '').strip()
+    password = d.get('password')
+    fullname = d.get('fullname', '').strip()
+    ref_code_input = d.get('refCode', '').strip()
+    
+    if not sanitize_input(username, "username") or not sanitize_input(fullname, "name"):
+        return jsonify({"success": False, "message": "Invalid Input Format"})
 
-        <div class="footer-links">
-            <a href="mailto:b22546690@gmail.com" class="social-btn" title="Email"><i class="fas fa-envelope"></i></a>
-            <a href="#" class="social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
-        </div>
-        <p style="margin-top: 15px; font-size: 0.85rem; color: #9ca3af;">Contact: b22546690@gmail.com</p>
-    </div>
+    users = db_request("users", "GET")
+    if users:
+        for v in users.values():
+            if v.get('username') == username:
+                return jsonify({"success": False, "message": "Username taken"})
+            if v.get('email') == email:
+                return jsonify({"success": False, "message": "Email already used"})
 
-    <script>
-        // আপনার টার্গেট ডেট (এই তারিখটি একবারই সেট করবেন)
-        const launchDate = new Date("May 10, 2026 00:00:00").getTime();
-        // এটি প্রগ্রেস বার ক্যালকুলেশনের জন্য শুরুর তারিখ (আজকের তারিখ হিসেবেও দিতে পারেন)
-        const startDate = new Date("March 1, 2026 00:00:00").getTime();
+    referred_by_uid = None
+    ref_msg = ""
+    
+    if ref_code_input:
+        ref_codes = db_request("referralCodes", "GET")
+        if ref_codes:
+            for r_uid, r_code in ref_codes.items():
+                if r_code == ref_code_input:
+                    referred_by_uid = r_uid
+                    break
+        if not referred_by_uid:
+            ref_msg = "Invalid Referral Code"
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const gap = launchDate - now;
+    import random
+    import uuid
+    new_ref_id = f"cash{random.randint(10000, 99999)}"
+    uid = str(uuid.uuid4())
+    
+    new_user = {
+        "username": username,
+        "password": password, 
+        "fullname": fullname,
+        "email": email,
+        "refId": new_ref_id,
+        "referredBy": referred_by_uid,
+        "isAccountActive": False,
+        "balance": 0,
+        "totalWithdraw": 0,
+        "joinDate": datetime.now().isoformat(),
+        "profilePictureUrl": "https://iili.io/fWs359j.jpg"
+    }
+    
+    db_request(f"users/{uid}", "PUT", new_user)
+    db_request(f"referralCodes/{uid}", "PUT", new_ref_id)
+    
+    if referred_by_uid:
+        db_request(f"users/{referred_by_uid}/referrals/{uid}", "PUT", True)
+        
+    return jsonify({"success": True, "uid": uid, "refMessage": ref_msg})
 
-            if (gap < 0) {
-                document.querySelector(".countdown-container").innerHTML = "<h2 style='color:#6c5ce7'>আমরা এখন লাইভ!</h2>";
-                document.getElementById('pbar').style.width = "100%";
-                return;
-            }
+@app.route('/api/dashboard', methods=['GET'])
+def dashboard():
+    uid = request.args.get('uid')
+    if not uid: return jsonify({})
+    
+    user_data = db_request(f"users/{uid}", "GET")
+    settings = db_request("admin", "GET")
+    tasks = db_request("tasks", "GET")
+    plans = db_request("plans", "GET")
+    challenges = db_request("admin/referralChallenges", "GET")
+    
+    # Check for pending activation or plan requests
+    pending_activation = False
+    pending_plan = False
+    
+    transactions = db_request("transactions", "GET")
+    if transactions:
+        for t in transactions.values():
+            if t.get('userId') == uid and t.get('status') == 'pending':
+                if t.get('type') == 'Activation':
+                    pending_activation = True
+                if t.get('type') == 'Plan Purchase':
+                    pending_plan = True
 
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
+    if user_data and 'password' in user_data: del user_data['password']
+    
+    return jsonify({
+        "user": user_data,
+        "settings": settings,
+        "tasks": tasks,
+        "plans": plans,
+        "challenges": challenges,
+        "pendingActivation": pending_activation,
+        "pendingPlan": pending_plan
+    })
 
-            const d = Math.floor(gap / day);
-            const h = Math.floor((gap % day) / hour);
-            const m = Math.floor((gap % hour) / minute);
-            const s = Math.floor((gap % minute) / second);
+@app.route('/api/gmail_page', methods=['GET'])
+def gmail_page():
+    uid = request.args.get('uid')
+    subs = db_request(f"users/{uid}/gmailSubmissions", "GET")
+    g_settings = db_request("admin/gmailSettings", "GET")
+    return jsonify({
+        "submissions": subs,
+        "settings": g_settings
+    })
 
-            document.getElementById('days').innerText = d.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+@app.route('/api/submit_gmail', methods=['POST'])
+def submit_gmail():
+    d = request.json
+    uid = d.get('uid')
+    email = d.get('email')
+    
+    g_settings = db_request("admin/gmailSettings", "GET")
+    
+    if g_settings.get('todayCount', 0) >= g_settings.get('globalLimit', 200):
+        return jsonify({"success": False, "message": "Global Limit Reached"})
+        
+    submission = {
+        "email": email,
+        "price": g_settings.get('price', 5),
+        "date": datetime.now().isoformat(),
+        "status": "pending",
+        "passwordUsed": g_settings.get('password')
+    }
+    
+    db_request(f"users/{uid}/gmailSubmissions", "POST", submission)
+    new_count = g_settings.get('todayCount', 0) + 1
+    db_request("admin/gmailSettings/todayCount", "PUT", new_count)
+    
+    return jsonify({"success": True})
 
-            // প্রগ্রেস বার ক্যালকুলেশন
-            const totalDuration = launchDate - startDate;
-            const elapsed = now - startDate;
-            const progress = (elapsed / totalDuration) * 100;
-            document.getElementById('pbar').style.width = Math.min(Math.max(progress, 0), 100) + "%";
-        }
+@app.route('/api/history', methods=['GET'])
+def history():
+    uid = request.args.get('uid')
+    all_trx = db_request("transactions", "GET")
+    my_trx = []
+    if all_trx:
+        for v in all_trx.values():
+            if v.get('userId') == uid:
+                my_trx.append(v)
+    return jsonify(my_trx)
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-    </script>
+@app.route('/api/withdraw', methods=['POST'])
+def withdraw():
+    d = request.json
+    uid = d.get('uid')
+    amount = float(d.get('amount'))
+    method = d.get('method')
+    number = d.get('number')
+    
+    user = db_request(f"users/{uid}", "GET")
+    settings = db_request("admin", "GET")
+    
+    if not user.get('isAccountActive'):
+        return jsonify({"success": False, "message": "Inactive Account"})
+        
+    if user.get('balance', 0) < amount:
+        return jsonify({"success": False, "message": "Low Balance"})
+        
+    if amount < settings.get('minWithdrawAmount', 100):
+        return jsonify({"success": False, "message": "Amount too low"})
+        
+    trx = {
+        "userId": uid,
+        "type": "Withdrawal",
+        "amount": -amount,
+        "details": f"{method} to {number}",
+        "date": datetime.now().isoformat(),
+        "status": "pending"
+    }
+    db_request("transactions", "POST", trx)
+    new_bal = user.get('balance', 0) - amount
+    db_request(f"users/{uid}/balance", "PUT", new_bal)
+    
+    return jsonify({"success": True})
 
-</body>
-</html>
+@app.route('/api/update_profile', methods=['POST'])
+def update_profile():
+    d = request.json
+    uid = d.get('uid')
+    fullname = d.get('fullname', '').strip()
+    username = d.get('username', '').strip()
+    
+    if not sanitize_input(username, "username") or not sanitize_input(fullname, "name"):
+        return jsonify({"success": False, "message": "Invalid Format"})
+    
+    db_request(f"users/{uid}/fullname", "PUT", fullname)
+    db_request(f"users/{uid}/username", "PUT", username)
+    return jsonify({"success": True})
+
+@app.route('/api/activate', methods=['POST'])
+def activate():
+    d = request.json
+    uid = d.get('uid')
+    amount = d.get('amount')
+    method = d.get('method')
+    trx_id = d.get('trxId')
+    
+    transactions = db_request("transactions", "GET")
+    if transactions:
+        for t in transactions.values():
+            if t.get('userId') == uid and t.get('type') == 'Activation' and t.get('status') == 'pending':
+                return jsonify({"success": False, "message": "Request already pending"})
+
+    trx = {
+        "userId": uid,
+        "type": "Activation",
+        "amount": amount,
+        "details": "Activation Request",
+        "trxId": trx_id,
+        "method": method,
+        "date": datetime.now().isoformat(),
+        "status": "pending"
+    }
+    db_request("transactions", "POST", trx)
+    return jsonify({"success": True})
+
+@app.route('/api/buy_plan', methods=['POST'])
+def buy_plan():
+    d = request.json
+    uid = d.get('uid')
+    amount = d.get('amount')
+    plan_name = d.get('planName')
+    trx_id = d.get('trxId')
+    method = d.get('method')
+
+    transactions = db_request("transactions", "GET")
+    if transactions:
+        for t in transactions.values():
+            if t.get('userId') == uid and t.get('type') == 'Plan Purchase' and t.get('status') == 'pending':
+                return jsonify({"success": False, "message": "Request already pending"})
+
+    trx = {
+        "userId": uid,
+        "type": "Plan Purchase",
+        "amount": amount,
+        "details": f"Plan: {plan_name}",
+        "trxId": trx_id,
+        "method": method,
+        "date": datetime.now().isoformat(),
+        "status": "pending"
+    }
+    db_request("transactions", "POST", trx)
+    return jsonify({"success": True})
+
+@app.route('/api/complete_task', methods=['POST'])
+def complete_task():
+    d = request.json
+    uid = d.get('uid')
+    tid = d.get('taskId')
+    reward = float(d.get('reward'))
+    
+    user = db_request(f"users/{uid}", "GET")
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    if user.get('lastTaskDate') == today:
+        return jsonify({"success": False, "message": "Daily limit reached"})
+    
+    completed = user.get('completedTasks', {})
+    if tid in completed:
+        return jsonify({"success": False, "message": "Already completed"})
+        
+    new_balance = user.get('balance', 0) + reward
+    db_request(f"users/{uid}/balance", "PUT", new_balance)
+    db_request(f"users/{uid}/lastTaskDate", "PUT", today)
+    db_request(f"users/{uid}/completedTasks/{tid}", "PUT", True)
+    
+    return jsonify({"success": True, "newBalance": new_balance})
+
+@app.route('/api/claim_daily', methods=['POST'])
+def claim_daily():
+    d = request.json
+    uid = d.get('uid')
+    amount = float(d.get('amount'))
+    
+    user = db_request(f"users/{uid}", "GET")
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    if user.get('lastClaimDate') == today:
+        return jsonify({"success": False, "message": "Already claimed today"})
+        
+    new_balance = user.get('balance', 0) + amount
+    db_request(f"users/{uid}/balance", "PUT", new_balance)
+    db_request(f"users/{uid}/lastClaimDate", "PUT", today)
+    
+    return jsonify({"success": True})
+
+@app.route('/api/claim_ref_reward', methods=['POST'])
+def claim_ref_reward():
+    d = request.json
+    uid = d.get('uid')
+    target = str(d.get('target'))
+    reward = float(d.get('reward'))
+    
+    user = db_request(f"users/{uid}", "GET")
+    
+    claimed = user.get('dailyRefClaims', {})
+    if claimed.get(target):
+        return jsonify({"success": False, "message": "Already claimed"})
+        
+    new_balance = user.get('balance', 0) + reward
+    db_request(f"users/{uid}/balance", "PUT", new_balance)
+    db_request(f"users/{uid}/dailyRefClaims/{target}", "PUT", True)
+    
+    return jsonify({"success": True})
