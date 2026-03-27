@@ -8,8 +8,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-DB_URL = os.environ.get("DB_URL")
-DB_SECRET = os.environ.get("DB_SECRET")
+DB_URL = os.environ.get("DB_URL", "https://cash-5355f-default-rtdb.firebaseio.com")
+DB_SECRET = os.environ.get("DB_SECRET", "5WwlOS8k66KYRgap4V4DmQffinLhMJNMQQW6GNdI")
 
 def db_request(path, method="GET", data=None):
     url = f"{DB_URL}/{path}.json?auth={DB_SECRET}"
